@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MgSoftDev.Returning.Helper;
+using MgSoftDev.Returning.Interfaces;
 
 namespace MgSoftDev.Returning.Logger
 {

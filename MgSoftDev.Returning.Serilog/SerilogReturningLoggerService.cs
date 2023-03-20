@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using MgSoftDev.Returning.Helper;
+using MgSoftDev.Returning.Interfaces;
 using MgSoftDev.Returning.Logger;
 using Serilog;
 using Serilog.Events;

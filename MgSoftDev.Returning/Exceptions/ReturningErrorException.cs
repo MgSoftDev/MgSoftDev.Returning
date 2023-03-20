@@ -1,4 +1,6 @@
-﻿namespace MgSoftDev.Returning.Exceptions
+﻿using MgSoftDev.Returning.Interfaces;
+
+namespace MgSoftDev.Returning.Exceptions
 {
     public class ReturningErrorException : System.Exception
     {

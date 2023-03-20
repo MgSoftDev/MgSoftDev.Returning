@@ -1,6 +1,7 @@
 using MgSoftDev.Returning;
 using MgSoftDev.Returning.Exceptions;
 using MgSoftDev.Returning.Helper;
+using MgSoftDev.Returning.Interfaces;
 
 namespace Testing;
 
