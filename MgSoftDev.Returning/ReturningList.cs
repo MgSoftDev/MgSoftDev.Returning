@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MgSoftDev.Returning.Exceptions;
@@ -8,13 +9,13 @@ using MgSoftDev.Returning.Interfaces;
 namespace MgSoftDev.Returning;
 
 
-public class Returning< T > : IReturning<T>
+public class ReturningList<T> : IReturning<List<T>>
 {
-    public Returning() { }
-
+    public ReturningList() { }
+    
     #region Property
 
-    public T                     Value          { get; internal set; }
+    public List<T>                     Value          { get; internal set; }
     public UnfinishedInfo        UnfinishedInfo { get; internal set; }
     public ErrorInfo             ErrorInfo      { get; internal set; }
     public bool                  IsLogStored    { get; set; }
@@ -26,7 +27,7 @@ public class Returning< T > : IReturning<T>
 
     #region Methods
 
-    public Returning<T> Throw()
+    public ReturningList<T> Throw()
     {
         if (ResultType == IReturning.TypeResult.Error) throw new ReturningErrorException(this);
         if (ResultType == IReturning.TypeResult.Unfinished) throw new ReturningUnfinishedException(this);
@@ -34,32 +35,42 @@ public class Returning< T > : IReturning<T>
         return this;
     }
 
+    
+
     #endregion
 
     #region Operators Overloading
 
-    public static implicit operator T(Returning<T> value)=>value.Value;
+    public static implicit operator List<T>(ReturningList<T> value)=>value.Value;
 
-    public static implicit operator Returning<T>(Returning value)=>
+    public static implicit operator ReturningList<T>(Returning value)=>
         new()
         {
             ErrorInfo      = value.ErrorInfo,
             UnfinishedInfo = value.UnfinishedInfo
         };
 
-    public static implicit operator Returning<T>(T value)=>
+    public static implicit operator ReturningList<T>(Returning<List<T>> value)=>
+        new()
+        {
+            ErrorInfo      = value.ErrorInfo,
+            UnfinishedInfo = value.UnfinishedInfo,
+            Value          = value.Value
+        };
+
+    public static implicit operator ReturningList<T>(List<T> value)=>
         new()
         {
             Value = value
         };
 
-    public static implicit operator Returning<T>(ErrorInfo value)=>
+    public static implicit operator ReturningList<T>(ErrorInfo value)=>
         new()
         {
             ErrorInfo = value
         };
 
-    public static implicit operator Returning<T>(UnfinishedInfo value)=>
+    public static implicit operator ReturningList<T>(UnfinishedInfo value)=>
         new()
         {
             UnfinishedInfo = value

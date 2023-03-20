@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MgSoftDev.Returning.Exceptions;
@@ -38,6 +39,97 @@ public partial class Returning : IReturning
     #region Static Metodos
 
 
+    
+    public static Returning Success()=>new();
+
+    public static Returning<T> Success< T >(T value)=>
+        new()
+        {
+            Value = value
+        };
+
+    public static ReturningList<T> Success< T >(List<T> value)=>
+        new()
+        {
+            Value = value
+        };
+
+    #region Error
+
+    public static ErrorInfo Error(string errorMessage, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
+                                  [ CallerLineNumber ] int lineNumber = 0)=>
+        new(errorMessage, tryException, errorCode, memberName, filePath, lineNumber);
+
+
+    public static ErrorInfo Error(string                    errorMessage,    object parameters, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null,
+                                  [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)=>
+        new(errorMessage, parameters, tryException, errorCode, memberName, filePath, lineNumber);
+
+    #endregion
+
+    #region Unfinished
+
+    public static UnfinishedInfo Unfinished(string title, string mensaje, UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information, string errorCode = null)=>
+        new(title, mensaje, notifyType, errorCode);
+
+
+    public static UnfinishedInfo Unfinished(string title, UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information, string errorCode = null)=>new(title, notifyType, errorCode);
+
+    public static UnfinishedInfo UnfinishedLocalization(string                    titleKey, string mensajeKey, object[] titleFormatArgs = null, object[] mensajeFormatArgs = null,
+                                                        UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information, string errorCode = null)=>
+        UnfinishedInfo.FromLocalization(titleKey, mensajeKey, titleFormatArgs, mensajeFormatArgs, notifyType, errorCode);
+
+    public static UnfinishedInfo UnfinishedLocalization(string titleKey, object[] titleFormatArgs = null, UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information,
+                                                        string errorCode = null)=>
+        UnfinishedInfo.FromLocalization(titleKey, titleFormatArgs, notifyType, errorCode);
+
+    #endregion
+
+    #endregion
+
+    #region Operators Overloading
+
+    public static implicit operator Returning(ErrorInfo value)=>
+        new()
+        {
+            ErrorInfo = value
+        };
+
+    public static implicit operator Returning(UnfinishedInfo value)=>
+        new()
+        {
+            UnfinishedInfo = value
+        };
+
+    public static implicit operator Returning(ReturningErrorException      value)=>( Returning ) value.Result;
+    public static implicit operator Returning(ReturningUnfinishedException value)=>( Returning ) value.Result;
+
+    #endregion
+
+    #region Overrides of Object
+
+    public override string ToString()
+    {
+        return $"ResultType:{ResultType}\n" + $"OK:{Ok}\n" + $"UnfinishedInfo:{UnfinishedInfo}\n" + $"ErrorInfo:{ErrorInfo}\n" + $"IsLogStored:{IsLogStored}\n" + $"LogException:{LogException}\n";
+    }
+
+    #endregion
+
+    #region IDisposable
+
+    public void Dispose()
+    {
+        ErrorInfo      = null;
+        UnfinishedInfo = null;
+        LogException   = null;
+    }
+
+    #endregion
+}
+
+public partial class Returning : IReturning
+{
+    
     #region Try
 
     /// <summary>
@@ -291,90 +383,6 @@ public partial class Returning : IReturning
 
     #endregion
 
-    
-    public static Returning Success()=>new();
-
-    public static Returning<T> Success< T >(T value)=>
-        new()
-        {
-            Value = value
-        };
-
-    #region Error
-
-    public static ErrorInfo Error(string errorMessage, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
-                                  [ CallerLineNumber ] int lineNumber = 0)=>
-        new(errorMessage, tryException, errorCode, memberName, filePath, lineNumber);
-
-
-    public static ErrorInfo Error(string                    errorMessage,    object parameters, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null,
-                                  [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)=>
-        new(errorMessage, parameters, tryException, errorCode, memberName, filePath, lineNumber);
-
-    #endregion
-
-    #region Unfinished
-
-    public static UnfinishedInfo Unfinished(string title, string mensaje, UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information, string errorCode = null)=>
-        new(title, mensaje, notifyType, errorCode);
-
-
-    public static UnfinishedInfo Unfinished(string title, UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information, string errorCode = null)=>new(title, notifyType, errorCode);
-
-    public static UnfinishedInfo UnfinishedLocalization(string                    titleKey, string mensajeKey, object[] titleFormatArgs = null, object[] mensajeFormatArgs = null,
-                                                        UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information, string errorCode = null)=>
-        UnfinishedInfo.FromLocalization(titleKey, mensajeKey, titleFormatArgs, mensajeFormatArgs, notifyType, errorCode);
-
-    public static UnfinishedInfo UnfinishedLocalization(string titleKey, object[] titleFormatArgs = null, UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information,
-                                                        string errorCode = null)=>
-        UnfinishedInfo.FromLocalization(titleKey, titleFormatArgs, notifyType, errorCode);
-
-    #endregion
-
-    #endregion
-
-    #region Operators Overloading
-
-    public static implicit operator Returning(ErrorInfo value)=>
-        new()
-        {
-            ErrorInfo = value
-        };
-
-    public static implicit operator Returning(UnfinishedInfo value)=>
-        new()
-        {
-            UnfinishedInfo = value
-        };
-
-    public static implicit operator Returning(ReturningErrorException      value)=>( Returning ) value.Result;
-    public static implicit operator Returning(ReturningUnfinishedException value)=>( Returning ) value.Result;
-
-    #endregion
-
-    #region Overrides of Object
-
-    public override string ToString()
-    {
-        return $"ResultType:{ResultType}\n" + $"OK:{Ok}\n" + $"UnfinishedInfo:{UnfinishedInfo}\n" + $"ErrorInfo:{ErrorInfo}\n" + $"IsLogStored:{IsLogStored}\n" + $"LogException:{LogException}\n";
-    }
-
-    #endregion
-
-    #region IDisposable
-
-    public void Dispose()
-    {
-        ErrorInfo      = null;
-        UnfinishedInfo = null;
-        LogException   = null;
-    }
-
-    #endregion
-}
-
-public partial class Returning : IReturning
-{
     #region Returning<T> Try
 
     /// <summary>
@@ -604,6 +612,202 @@ public partial class Returning : IReturning
                                                  string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
         return new ReturningAsync<T>(()=>
+        {
+            try
+            {
+                var res = methodFunc.Invoke();
+                if (saveLog) res.SaveLog();
+
+                return res;
+            }
+            catch ( ReturningUnfinishedException e )
+            {
+                return ( Returning ) e.Result;
+            }
+            catch ( ReturningErrorException e )
+            {
+                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
+            }
+            catch ( Exception e )
+            {
+                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
+                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
+
+                return error;
+            }
+        });
+    }
+
+    #endregion
+    
+    
+    #region ReturningList<T> Try
+
+    /// <summary>
+    /// Execute a function<T> and catch the exceptions, returning an Returning<T>
+    /// </summary>
+    /// <param name="methodFunc"></param>
+    /// <param name="errorName"></param>
+    /// <param name="errorCode"></param>
+    /// <param name="memberName"></param>
+    /// <param name="filePath"></param>
+    /// <param name="lineNumber"></param>
+    /// <returns></returns>
+    public static ReturningList<T> Try<T>(Func<List<T>> methodFunc, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, [ CallerMemberName ] string memberName = null,
+                                       [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    {
+        try
+        {
+            var val = methodFunc.Invoke();
+
+            return val;
+        }
+        catch ( ReturningUnfinishedException e )
+        {
+            return ( Returning ) e.Result;
+        }
+        catch ( ReturningErrorException e )
+        {
+            return ( Returning ) e.Result;
+        }
+        catch ( Exception e )
+        {
+            return new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
+        }
+    }
+
+
+    public static ReturningListAsync<T> TryTask<T>(Func<Task<List<T>>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
+                                                   [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    {
+        return new ReturningListAsync<T>(()=>
+        {
+            try
+            {
+                try
+                {
+                    var invoke = methodFunc.Invoke();
+                    invoke.Wait();
+
+                    return Returning.Success(invoke.Result);
+                }
+                catch ( Exception e )
+                {
+                    throw e.InnerException;
+                }
+            }
+            catch ( ReturningUnfinishedException e )
+            {
+                return ( Returning ) e.Result;
+            }
+            catch ( ReturningErrorException e )
+            {
+                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
+            }
+            catch ( Exception e )
+            {
+                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
+                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
+
+                return error;
+            }
+        });
+    }
+
+
+    public static ReturningListAsync<T> TryTask<T>(Func<List<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
+                                                   [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    {
+        return new ReturningListAsync<T>(()=>
+        {
+            try
+            {
+                var val = methodFunc.Invoke();
+
+                return Returning.Success(val);
+            }
+            catch ( ReturningUnfinishedException e )
+            {
+                return ( Returning ) e.Result;
+            }
+            catch ( ReturningErrorException e )
+            {
+                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
+            }
+            catch ( Exception e )
+            {
+                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
+                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
+
+                return error;
+            }
+        });
+    }
+
+
+    public static ReturningList<T> Try<T>(Func<ReturningList<T>> methodFunc, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, [ CallerMemberName ] string memberName = null,
+                                          [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    {
+        try
+        {
+            return methodFunc.Invoke();
+        }
+        catch ( ReturningUnfinishedException e )
+        {
+            return ( Returning ) e.Result;
+        }
+        catch ( ReturningErrorException e )
+        {
+            return ( Returning ) e.Result;
+        }
+        catch ( Exception e )
+        {
+            return new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
+        }
+    }
+
+    public static ReturningListAsync<T> TryTask<T>(Func<Task<ReturningList<T>>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
+                                                   string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    {
+        return new ReturningListAsync<T>(()=>
+        {
+            try
+            {
+                try
+                {
+                    var res = methodFunc.Invoke();
+                    res.Wait();
+                    if (saveLog) res.Result.SaveLog();
+
+                    return res.Result;
+                }
+                catch ( Exception e )
+                {
+                    throw e.InnerException;
+                }
+            }
+            catch ( ReturningUnfinishedException e )
+            {
+                return ( Returning ) e.Result;
+            }
+            catch ( ReturningErrorException e )
+            {
+                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
+            }
+            catch ( Exception e )
+            {
+                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
+                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
+
+                return error;
+            }
+        });
+    }
+
+    public static ReturningListAsync<T> TryTask<T>(Func<ReturningList<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
+                                                   [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    {
+        return new ReturningListAsync<T>(()=>
         {
             try
             {

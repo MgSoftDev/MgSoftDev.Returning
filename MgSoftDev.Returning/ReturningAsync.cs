@@ -43,3 +43,22 @@ public class ReturningAsync<T> : Task<Returning<T>>
         Start();
     }
 }
+public class ReturningListAsync<T> : Task<ReturningList<T>>
+{
+    public ReturningListAsync(Func<ReturningList<T>> function): base(function)
+    {
+        Start();
+    }
+    public ReturningListAsync(Func<ReturningList<T>> function, CancellationToken cancellationToken) : base(function, cancellationToken)
+    {
+        Start();
+    }
+    public ReturningListAsync(Func<ReturningList<T>> function, CancellationToken cancellationToken, TaskCreationOptions creationOptions) : base(function, cancellationToken,creationOptions)
+    {
+        Start();
+    }
+    public ReturningListAsync(Func<ReturningList<T>> function, TaskCreationOptions creationOptions) : base(function, creationOptions)
+    {
+        Start();
+    }
+}
