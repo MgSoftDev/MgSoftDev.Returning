@@ -1,5 +1,6 @@
 using MgSoftDev.Returning;
 using MgSoftDev.Returning.Exceptions;
+using MgSoftDev.Returning.Helper;
 
 namespace Testing;
 
@@ -43,6 +44,28 @@ public class ReturningGenericTest
         Assert.Pass();
     }
 
+    
+    [ Test ]
+    public async Task SaveLog()
+    {
+        var res = Returning.Success(10)
+                           .SaveLog();
+        var res2 = await Returning.Success(10)
+                            .SaveLogAsync();
+        
+        Assert.AreEqual(res.Value,10);
+        Assert.AreEqual(res2.Value,10);
+        
+        
+       Console.WriteLine("------------------------- Res1 \n{0}", res);
+       Console.WriteLine("------------------------- Res2 \n{0}", res2);
+       
+        Assert.Pass();
+    }
+
+    
+    
+    
     [ Test ]
     public void Try1()
     {

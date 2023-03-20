@@ -12,10 +12,10 @@ public partial class Returning : IReturning
 {
     #region Property
 
-    public UnfinishedInfo        UnfinishedInfo { get; set; }
-    public ErrorInfo             ErrorInfo      { get; set; }
-    public bool                  IsLogStored    { get; set; }
-    public Exception             LogException   { get; set; }
+    public UnfinishedInfo        UnfinishedInfo { get; internal set; }
+    public ErrorInfo             ErrorInfo      { get; internal set; }
+    public bool                  IsLogStored    { get; internal set; }
+    public Exception             LogException   { get;  set; }
     public bool                  Ok             =>ErrorInfo == null && UnfinishedInfo == null;
     public IReturning.TypeResult ResultType     =>Ok ? IReturning.TypeResult.Success : ( ErrorInfo != null ? IReturning.TypeResult.Error : IReturning.TypeResult.Unfinished );
 
@@ -373,7 +373,7 @@ public partial class Returning : IReturning
 
 public partial class Returning : IReturning
 {
-     #region Returning<T> Try
+    #region Returning<T> Try
 
     /// <summary>
     /// Execute a function[T] and catch the exceptions, returning an Returning[T]
@@ -385,8 +385,8 @@ public partial class Returning : IReturning
     /// <param name="filePath"></param>
     /// <param name="lineNumber"></param>
     /// <returns></returns>
-    public static Returning<T> Try<T>(Func<T> methodFunc, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, [ CallerMemberName ] string memberName = null,
-                                   [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    public static Returning<T> Try< T >(Func<T> methodFunc, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, [ CallerMemberName ] string memberName = null,
+                                        [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
         try
         {
@@ -408,22 +408,22 @@ public partial class Returning : IReturning
         }
     }
 
-/// <summary>
-/// Execute a function[Task[T]] and catch the exceptions, returning an Returning[T]
-/// </summary>
-/// <param name="methodFunc"></param>
-/// <param name="saveLog"></param>
-/// <param name="errorName"></param>
-/// <param name="errorCode"></param>
-/// <param name="logName"></param>
-/// <param name="memberName"></param>
-/// <param name="filePath"></param>
-/// <param name="lineNumber"></param>
-/// <typeparam name="T"></typeparam>
-/// <returns></returns>
-/// <exception cref="Exception"></exception>
-    public static ReturningAsync<T> TryTask<T>(Func<Task<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
-                                               [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    /// <summary>
+    /// Execute a function[Task[T]] and catch the exceptions, returning an Returning[T]
+    /// </summary>
+    /// <param name="methodFunc"></param>
+    /// <param name="saveLog"></param>
+    /// <param name="errorName"></param>
+    /// <param name="errorCode"></param>
+    /// <param name="logName"></param>
+    /// <param name="memberName"></param>
+    /// <param name="filePath"></param>
+    /// <param name="lineNumber"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public static ReturningAsync<T> TryTask< T >(Func<Task<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
+                                                 [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
         return new ReturningAsync<T>(()=>
         {
@@ -459,21 +459,21 @@ public partial class Returning : IReturning
         });
     }
 
-/// <summary>
-/// Execute a function[T] in new thread and catch the exceptions, returning an Returning[T]
-/// </summary>
-/// <param name="methodFunc"></param>
-/// <param name="saveLog"></param>
-/// <param name="errorName"></param>
-/// <param name="errorCode"></param>
-/// <param name="logName"></param>
-/// <param name="memberName"></param>
-/// <param name="filePath"></param>
-/// <param name="lineNumber"></param>
-/// <typeparam name="T"></typeparam>
-/// <returns></returns>
-    public static ReturningAsync<T> TryTask<T>(Func<T> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
-                                               [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    /// <summary>
+    /// Execute a function[T] in new thread and catch the exceptions, returning an Returning[T]
+    /// </summary>
+    /// <param name="methodFunc"></param>
+    /// <param name="saveLog"></param>
+    /// <param name="errorName"></param>
+    /// <param name="errorCode"></param>
+    /// <param name="logName"></param>
+    /// <param name="memberName"></param>
+    /// <param name="filePath"></param>
+    /// <param name="lineNumber"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static ReturningAsync<T> TryTask< T >(Func<T> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
+                                                 [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
         return new ReturningAsync<T>(()=>
         {
@@ -501,19 +501,19 @@ public partial class Returning : IReturning
         });
     }
 
-/// <summary>
-/// Execute a function[Returning[T]]  and catch the exceptions, returning an Returning[T]
-/// </summary>
-/// <param name="methodFunc"></param>
-/// <param name="errorName"></param>
-/// <param name="errorCode"></param>
-/// <param name="memberName"></param>
-/// <param name="filePath"></param>
-/// <param name="lineNumber"></param>
-/// <typeparam name="T"></typeparam>
-/// <returns></returns>
-    public static Returning<T> Try<T>(Func<Returning<T>> methodFunc, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, [ CallerMemberName ] string memberName = null,
-                                      [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    /// <summary>
+    /// Execute a function[Returning[T]]  and catch the exceptions, returning an Returning[T]
+    /// </summary>
+    /// <param name="methodFunc"></param>
+    /// <param name="errorName"></param>
+    /// <param name="errorCode"></param>
+    /// <param name="memberName"></param>
+    /// <param name="filePath"></param>
+    /// <param name="lineNumber"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static Returning<T> Try< T >(Func<Returning<T>> methodFunc, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, [ CallerMemberName ] string memberName = null,
+                                        [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
         try
         {
@@ -533,24 +533,24 @@ public partial class Returning : IReturning
         }
     }
 
-/// <summary>
-/// Execute a function[Task[Returning[T]]] and catch the exceptions, returning an Returning[T]
-/// </summary>
-/// <param name="methodFunc"></param>
-/// <param name="saveLog"></param>
-/// <param name="errorName"></param>
-/// <param name="errorCode"></param>
-/// <param name="logName"></param>
-/// <param name="memberName"></param>
-/// <param name="filePath"></param>
-/// <param name="lineNumber"></param>
-/// <typeparam name="T"></typeparam>
-/// <returns></returns>
-/// <exception cref="Exception"></exception>
-    public static ReturningAsync<T> TryTask<T>(Func<Task<Returning<T>>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
-                                               string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    /// <summary>
+    /// Execute a function[Task[Returning[T]]] and catch the exceptions, returning an Returning[T]
+    /// </summary>
+    /// <param name="methodFunc"></param>
+    /// <param name="saveLog"></param>
+    /// <param name="errorName"></param>
+    /// <param name="errorCode"></param>
+    /// <param name="logName"></param>
+    /// <param name="memberName"></param>
+    /// <param name="filePath"></param>
+    /// <param name="lineNumber"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public static ReturningAsync<T> TryTask< T >(Func<Task<Returning<T>>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
+                                                 string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
-        return new ReturningAsync<T>( ()=>
+        return new ReturningAsync<T>(()=>
         {
             try
             {
@@ -584,21 +584,22 @@ public partial class Returning : IReturning
             }
         });
     }
-/// <summary>
-/// Execute a function[Returning[T]] in new thread and catch the exceptions, returning an Returning[T]
-/// </summary>
-/// <param name="methodFunc"></param>
-/// <param name="saveLog"></param>
-/// <param name="errorName"></param>
-/// <param name="errorCode"></param>
-/// <param name="logName"></param>
-/// <param name="memberName"></param>
-/// <param name="filePath"></param>
-/// <param name="lineNumber"></param>
-/// <typeparam name="T"></typeparam>
-/// <returns></returns>
-    public static ReturningAsync<T> TryTask<T>(Func<Returning<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
-                                               string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+
+    /// <summary>
+    /// Execute a function[Returning[T]] in new thread and catch the exceptions, returning an Returning[T]
+    /// </summary>
+    /// <param name="methodFunc"></param>
+    /// <param name="saveLog"></param>
+    /// <param name="errorName"></param>
+    /// <param name="errorCode"></param>
+    /// <param name="logName"></param>
+    /// <param name="memberName"></param>
+    /// <param name="filePath"></param>
+    /// <param name="lineNumber"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static ReturningAsync<T> TryTask< T >(Func<Returning<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
+                                                 string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
         return new ReturningAsync<T>(()=>
         {
@@ -640,10 +641,10 @@ public class Returning< T > : IReturning<T>
     public UnfinishedInfo        UnfinishedInfo { get; internal set; }
     public ErrorInfo             ErrorInfo      { get; internal set; }
     public bool                  IsLogStored    { get; set; }
-    public Exception             LogException   { get; internal set; }
+    public Exception             LogException   { get; set; }
     public bool                  Ok             =>ErrorInfo == null && UnfinishedInfo == null;
     public IReturning.TypeResult ResultType     =>Ok ? IReturning.TypeResult.Success : ( ErrorInfo != null ? IReturning.TypeResult.Error : IReturning.TypeResult.Unfinished );
-
+    public bool                  OkNotNull      =>Ok && Value != null;
     #endregion
 
     #region Methods
@@ -782,9 +783,9 @@ public class Returning< T > : IReturning<T>
     }
 
     public static ReturningAsync<T> TryTask(Func<Task<Returning<T>>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
-                                             string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+                                            string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
-        return new ReturningAsync<T>( ()=>
+        return new ReturningAsync<T>(()=>
         {
             try
             {
@@ -819,8 +820,8 @@ public class Returning< T > : IReturning<T>
         });
     }
 
-    public static ReturningAsync<T> TryTask(Func<Returning<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
-                                            string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    public static ReturningAsync<T> TryTask(Func<Returning<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
+                                            [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
         return new ReturningAsync<T>(()=>
         {
@@ -927,4 +928,6 @@ public interface IReturning : IDisposable
     ErrorInfo      ErrorInfo      { get; }
     bool           Ok             { get; }
     TypeResult     ResultType     { get; }
+    bool           IsLogStored    { get; }
+    Exception      LogException   { get; set; }
 }

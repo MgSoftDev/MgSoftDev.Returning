@@ -16,4 +16,12 @@
         <LangVersion>10</LangVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MgSoftDev.Returning\MgSoftDev.Returning.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Serilog" Version="2.12.0" />
+    </ItemGroup>
+
 </Project>

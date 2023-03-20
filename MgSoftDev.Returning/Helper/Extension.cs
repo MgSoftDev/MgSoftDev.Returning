@@ -4,11 +4,11 @@ namespace MgSoftDev.Returning.Helper
 {
     public static class Extension
     {
-        // public static void OkNotNullAction<T>(this Returning<T> returning, Action<T> action )
-        // {
-        //     if (returning.OkNotNull)
-        //         action(returning.Val);
-        // }
+        public static void OkNotNullAction<T>(this Returning<T> returning, Action<T> action )
+        {
+            if (returning.OkNotNull)
+                action(returning.Value);
+        }
 
 
         public static string Format( this string val, params object[] args )
@@ -30,19 +30,19 @@ namespace MgSoftDev.Returning.Helper
             }
         }
 
-        // public static Returning Optimize(this Returning value)
-        // {
-        //     if (value.Errors.Any())
-        //         value.Errors.ForEach(f => f.TryException = new Exception(f.TryException?.Message));
-        //
-        //     return value;
-        // }
-        // public static Returning<T> Optimize<T>(this Returning<T> value)
-        // {
-        //     if (value.Errors.Any())
-        //         value.Errors.ForEach(f => f.TryException = new Exception(f.TryException?.Message));
-        //
-        //     return value;
-        // }
+        public static Returning Optimize(this Returning value)
+        {
+            if (value.ErrorInfo!= null)
+                value.ErrorInfo.TryException = new Exception(value.ErrorInfo?.TryException?.Message);
+        
+            return value;
+        }
+        public static Returning<T> Optimize<T>(this Returning<T> value)
+        {
+            if (value.ErrorInfo != null)
+                value.ErrorInfo.TryException = new Exception(value.ErrorInfo?.TryException?.Message);
+        
+            return value;
+        }
     }
 }
