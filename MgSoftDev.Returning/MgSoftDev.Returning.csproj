@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+        <Description>Library for the handling of the value returned in methods, helps to speed up the returned result of a method, containing its result, errors or messages to the user.</Description>
+        <Authors>Miguel Fernando Garcias Salazar</Authors>
+        <Copyright>MgSoftDev</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/MigeruGarcia/Returning</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/MigeruGarcia/Returning</RepositoryUrl>
+        <AssemblyName>MgSoftDev.Returning</AssemblyName>
+        <Company>MgSoftDev</Company>
+        <RootNamespace>MgSoftDev.Returning</RootNamespace>
+        <PackageTags>Returning</PackageTags>
+        <Version>1.0.0</Version>
+        <LangVersion>10</LangVersion>
+    </PropertyGroup>
+
+</Project>

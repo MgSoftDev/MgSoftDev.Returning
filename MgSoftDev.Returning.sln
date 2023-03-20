@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MgSoftDev.Returning", "MgSoftDev.Returning\MgSoftDev.Returning.csproj", "{E64F41E8-8AFC-40E7-9719-FDF4CFE87D4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MgSoftDev.Returning.Serilog", "MgSoftDev.Returning.Serilog\MgSoftDev.Returning.Serilog.csproj", "{4B1D141E-438B-474D-A603-157FFE1DC469}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{F9D77AF4-BFA4-4012-89B4-279C1C25096A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E64F41E8-8AFC-40E7-9719-FDF4CFE87D4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E64F41E8-8AFC-40E7-9719-FDF4CFE87D4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E64F41E8-8AFC-40E7-9719-FDF4CFE87D4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E64F41E8-8AFC-40E7-9719-FDF4CFE87D4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B1D141E-438B-474D-A603-157FFE1DC469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B1D141E-438B-474D-A603-157FFE1DC469}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B1D141E-438B-474D-A603-157FFE1DC469}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B1D141E-438B-474D-A603-157FFE1DC469}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9D77AF4-BFA4-4012-89B4-279C1C25096A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D77AF4-BFA4-4012-89B4-279C1C25096A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D77AF4-BFA4-4012-89B4-279C1C25096A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D77AF4-BFA4-4012-89B4-279C1C25096A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
