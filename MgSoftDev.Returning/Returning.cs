@@ -4,14 +4,19 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MgSoftDev.Returning.Exceptions;
 using MgSoftDev.Returning.Helper;
-using MgSoftDev.Returning.Interfaces;
 
 // ReSharper disable ExplicitCallerInfoArgument
 
 namespace MgSoftDev.Returning;
 
-public partial class Returning : IReturning
+public partial class Returning 
 {
+    public enum TypeResult
+    {
+        Success,
+        Error,
+        Unfinished
+    }
     #region Property
 
     public UnfinishedInfo        UnfinishedInfo { get; internal set; }
@@ -19,7 +24,7 @@ public partial class Returning : IReturning
     public bool                  IsLogStored    { get; internal set; }
     public Exception             LogException   { get;  set; }
     public bool                  Ok             =>ErrorInfo == null && UnfinishedInfo == null;
-    public IReturning.TypeResult ResultType     =>Ok ? IReturning.TypeResult.Success : ( ErrorInfo != null ? IReturning.TypeResult.Error : IReturning.TypeResult.Unfinished );
+    public TypeResult ResultType     =>Ok ? TypeResult.Success : ( ErrorInfo != null ? TypeResult.Error : TypeResult.Unfinished );
 
     #endregion
 
@@ -28,8 +33,8 @@ public partial class Returning : IReturning
     /// <exception cref="ReturningErrorException">Condition.</exception>
     public Returning Throw()
     {
-        if (ResultType == IReturning.TypeResult.Error) throw new ReturningErrorException(this);
-        if (ResultType == IReturning.TypeResult.Unfinished) throw new ReturningUnfinishedException(this);
+        if (ResultType == TypeResult.Error) throw new ReturningErrorException(this);
+        if (ResultType == TypeResult.Unfinished) throw new ReturningUnfinishedException(this);
 
         return this;
     }
@@ -55,6 +60,7 @@ public partial class Returning : IReturning
         };
 
     #region Error
+
 
     public static ErrorInfo Error(string errorMessage, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
                                   [ CallerLineNumber ] int lineNumber = 0)=>
@@ -101,8 +107,8 @@ public partial class Returning : IReturning
             UnfinishedInfo = value
         };
 
-    public static implicit operator Returning(ReturningErrorException      value)=>( Returning ) value.Result;
-    public static implicit operator Returning(ReturningUnfinishedException value)=>( Returning ) value.Result;
+    public static implicit operator Returning(ReturningErrorException      value)=>value.Result;
+    public static implicit operator Returning(ReturningUnfinishedException value)=>value.Result;
 
     #endregion
 
@@ -127,7 +133,7 @@ public partial class Returning : IReturning
     #endregion
 }
 
-public partial class Returning : IReturning
+public partial class Returning 
 {
     
     #region Try
@@ -148,16 +154,16 @@ public partial class Returning : IReturning
         try
         {
             methodAction.Invoke();
-
+    
             return Success();
         }
         catch ( ReturningUnfinishedException e )
         {
-            return ( Returning ) e.Result;
+            return e.Result;
         }
         catch ( ReturningErrorException e )
         {
-            return ( Returning ) e.Result;
+            return e.Result;
         }
         catch ( Exception e )
         {
@@ -193,16 +199,16 @@ public partial class Returning : IReturning
                 }
                 catch ( Exception e )
                 {
-                    throw e.InnerException;
+                    throw e.InnerException??e;
                 }
             }
             catch ( ReturningUnfinishedException e )
             {
-                return ( Returning ) e.Result;
+                return e.Result;
             }
             catch ( ReturningErrorException e )
             {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
+                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : e.Result;
             }
             catch ( Exception e )
             {
@@ -240,18 +246,18 @@ public partial class Returning : IReturning
             }
             catch ( ReturningUnfinishedException e )
             {
-                return ( Returning ) e.Result;
+                return e.Result;
             }
             catch ( ReturningErrorException e )
             {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
+                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : e.Result;
             }
             catch ( Exception e )
             {
                 var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
                 if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
 
-                return ( Returning ) error;
+                return error;
             }
         });
     }
@@ -276,11 +282,11 @@ public partial class Returning : IReturning
         }
         catch ( ReturningUnfinishedException e )
         {
-            return ( Returning ) e.Result;
+            return e.Result;
         }
         catch ( ReturningErrorException e )
         {
-            return ( Returning ) e.Result;
+            return e.Result;
         }
         catch ( Exception e )
         {
@@ -318,16 +324,16 @@ public partial class Returning : IReturning
                 }
                 catch ( Exception e )
                 {
-                    throw e.InnerException;
+                    throw e.InnerException??e;
                 }
             }
             catch ( ReturningUnfinishedException e )
             {
-                return ( Returning ) e.Result;
+                return e.Result;
             }
             catch ( ReturningErrorException e )
             {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
+                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : e.Result;
             }
             catch ( Exception e )
             {
@@ -365,11 +371,11 @@ public partial class Returning : IReturning
             }
             catch ( ReturningUnfinishedException e )
             {
-                return ( Returning ) e.Result;
+                return e.Result;
             }
             catch ( ReturningErrorException e )
             {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
+                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : e.Result;
             }
             catch ( Exception e )
             {
@@ -383,456 +389,7 @@ public partial class Returning : IReturning
 
     #endregion
 
-    #region Returning<T> Try
-
-    /// <summary>
-    /// Execute a function[T] and catch the exceptions, returning an Returning[T]
-    /// </summary>
-    /// <param name="methodFunc"></param>
-    /// <param name="errorName"></param>
-    /// <param name="errorCode"></param>
-    /// <param name="memberName"></param>
-    /// <param name="filePath"></param>
-    /// <param name="lineNumber"></param>
-    /// <returns></returns>
-    public static Returning<T> Try< T >(Func<T> methodFunc, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, [ CallerMemberName ] string memberName = null,
-                                        [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        try
-        {
-            var val = methodFunc.Invoke();
-
-            return val;
-        }
-        catch ( ReturningUnfinishedException e )
-        {
-            return ( Returning ) e.Result;
-        }
-        catch ( ReturningErrorException e )
-        {
-            return ( Returning ) e.Result;
-        }
-        catch ( Exception e )
-        {
-            return new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-        }
-    }
-
-    /// <summary>
-    /// Execute a function[Task[T]] and catch the exceptions, returning an Returning[T]
-    /// </summary>
-    /// <param name="methodFunc"></param>
-    /// <param name="saveLog"></param>
-    /// <param name="errorName"></param>
-    /// <param name="errorCode"></param>
-    /// <param name="logName"></param>
-    /// <param name="memberName"></param>
-    /// <param name="filePath"></param>
-    /// <param name="lineNumber"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    /// <exception cref="Exception"></exception>
-    public static ReturningAsync<T> TryTask< T >(Func<Task<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
-                                                 [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        return new ReturningAsync<T>(()=>
-        {
-            try
-            {
-                try
-                {
-                    var invoke = methodFunc.Invoke();
-                    invoke.Wait();
-
-                    return Returning.Success(invoke.Result);
-                }
-                catch ( Exception e )
-                {
-                    throw e.InnerException;
-                }
-            }
-            catch ( ReturningUnfinishedException e )
-            {
-                return ( Returning ) e.Result;
-            }
-            catch ( ReturningErrorException e )
-            {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
-            }
-            catch ( Exception e )
-            {
-                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
-
-                return error;
-            }
-        });
-    }
-
-    /// <summary>
-    /// Execute a function[T] in new thread and catch the exceptions, returning an Returning[T]
-    /// </summary>
-    /// <param name="methodFunc"></param>
-    /// <param name="saveLog"></param>
-    /// <param name="errorName"></param>
-    /// <param name="errorCode"></param>
-    /// <param name="logName"></param>
-    /// <param name="memberName"></param>
-    /// <param name="filePath"></param>
-    /// <param name="lineNumber"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public static ReturningAsync<T> TryTask< T >(Func<T> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
-                                                 [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        return new ReturningAsync<T>(()=>
-        {
-            try
-            {
-                var val = methodFunc.Invoke();
-
-                return Returning.Success(val);
-            }
-            catch ( ReturningUnfinishedException e )
-            {
-                return ( Returning ) e.Result;
-            }
-            catch ( ReturningErrorException e )
-            {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
-            }
-            catch ( Exception e )
-            {
-                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
-
-                return error;
-            }
-        });
-    }
-
-    /// <summary>
-    /// Execute a function[Returning[T]]  and catch the exceptions, returning an Returning[T]
-    /// </summary>
-    /// <param name="methodFunc"></param>
-    /// <param name="errorName"></param>
-    /// <param name="errorCode"></param>
-    /// <param name="memberName"></param>
-    /// <param name="filePath"></param>
-    /// <param name="lineNumber"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public static Returning<T> Try< T >(Func<Returning<T>> methodFunc, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, [ CallerMemberName ] string memberName = null,
-                                        [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        try
-        {
-            return methodFunc.Invoke();
-        }
-        catch ( ReturningUnfinishedException e )
-        {
-            return ( Returning ) e.Result;
-        }
-        catch ( ReturningErrorException e )
-        {
-            return ( Returning ) e.Result;
-        }
-        catch ( Exception e )
-        {
-            return new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-        }
-    }
-
-    /// <summary>
-    /// Execute a function[Task[Returning[T]]] and catch the exceptions, returning an Returning[T]
-    /// </summary>
-    /// <param name="methodFunc"></param>
-    /// <param name="saveLog"></param>
-    /// <param name="errorName"></param>
-    /// <param name="errorCode"></param>
-    /// <param name="logName"></param>
-    /// <param name="memberName"></param>
-    /// <param name="filePath"></param>
-    /// <param name="lineNumber"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    /// <exception cref="Exception"></exception>
-    public static ReturningAsync<T> TryTask< T >(Func<Task<Returning<T>>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
-                                                 string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        return new ReturningAsync<T>(()=>
-        {
-            try
-            {
-                try
-                {
-                    var res = methodFunc.Invoke();
-                    res.Wait();
-                    if (saveLog) res.Result.SaveLog();
-
-                    return res.Result;
-                }
-                catch ( Exception e )
-                {
-                    throw e.InnerException;
-                }
-            }
-            catch ( ReturningUnfinishedException e )
-            {
-                return ( Returning ) e.Result;
-            }
-            catch ( ReturningErrorException e )
-            {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
-            }
-            catch ( Exception e )
-            {
-                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
-
-                return error;
-            }
-        });
-    }
-
-    /// <summary>
-    /// Execute a function[Returning[T]] in new thread and catch the exceptions, returning an Returning[T]
-    /// </summary>
-    /// <param name="methodFunc"></param>
-    /// <param name="saveLog"></param>
-    /// <param name="errorName"></param>
-    /// <param name="errorCode"></param>
-    /// <param name="logName"></param>
-    /// <param name="memberName"></param>
-    /// <param name="filePath"></param>
-    /// <param name="lineNumber"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public static ReturningAsync<T> TryTask< T >(Func<Returning<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
-                                                 string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        return new ReturningAsync<T>(()=>
-        {
-            try
-            {
-                var res = methodFunc.Invoke();
-                if (saveLog) res.SaveLog();
-
-                return res;
-            }
-            catch ( ReturningUnfinishedException e )
-            {
-                return ( Returning ) e.Result;
-            }
-            catch ( ReturningErrorException e )
-            {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
-            }
-            catch ( Exception e )
-            {
-                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
-
-                return error;
-            }
-        });
-    }
-
-    #endregion
     
     
-    #region ReturningList<T> Try
-
-    /// <summary>
-    /// Execute a function<T> and catch the exceptions, returning an Returning<T>
-    /// </summary>
-    /// <param name="methodFunc"></param>
-    /// <param name="errorName"></param>
-    /// <param name="errorCode"></param>
-    /// <param name="memberName"></param>
-    /// <param name="filePath"></param>
-    /// <param name="lineNumber"></param>
-    /// <returns></returns>
-    public static ReturningList<T> Try<T>(Func<List<T>> methodFunc, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, [ CallerMemberName ] string memberName = null,
-                                       [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        try
-        {
-            var val = methodFunc.Invoke();
-
-            return val;
-        }
-        catch ( ReturningUnfinishedException e )
-        {
-            return ( Returning ) e.Result;
-        }
-        catch ( ReturningErrorException e )
-        {
-            return ( Returning ) e.Result;
-        }
-        catch ( Exception e )
-        {
-            return new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-        }
-    }
-
-
-    public static ReturningListAsync<T> TryTask<T>(Func<Task<List<T>>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
-                                                   [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        return new ReturningListAsync<T>(()=>
-        {
-            try
-            {
-                try
-                {
-                    var invoke = methodFunc.Invoke();
-                    invoke.Wait();
-
-                    return Returning.Success(invoke.Result);
-                }
-                catch ( Exception e )
-                {
-                    throw e.InnerException;
-                }
-            }
-            catch ( ReturningUnfinishedException e )
-            {
-                return ( Returning ) e.Result;
-            }
-            catch ( ReturningErrorException e )
-            {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
-            }
-            catch ( Exception e )
-            {
-                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
-
-                return error;
-            }
-        });
-    }
-
-
-    public static ReturningListAsync<T> TryTask<T>(Func<List<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
-                                                   [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        return new ReturningListAsync<T>(()=>
-        {
-            try
-            {
-                var val = methodFunc.Invoke();
-
-                return Returning.Success(val);
-            }
-            catch ( ReturningUnfinishedException e )
-            {
-                return ( Returning ) e.Result;
-            }
-            catch ( ReturningErrorException e )
-            {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
-            }
-            catch ( Exception e )
-            {
-                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
-
-                return error;
-            }
-        });
-    }
-
-
-    public static ReturningList<T> Try<T>(Func<ReturningList<T>> methodFunc, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, [ CallerMemberName ] string memberName = null,
-                                          [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        try
-        {
-            return methodFunc.Invoke();
-        }
-        catch ( ReturningUnfinishedException e )
-        {
-            return ( Returning ) e.Result;
-        }
-        catch ( ReturningErrorException e )
-        {
-            return ( Returning ) e.Result;
-        }
-        catch ( Exception e )
-        {
-            return new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-        }
-    }
-
-    public static ReturningListAsync<T> TryTask<T>(Func<Task<ReturningList<T>>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
-                                                   string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        return new ReturningListAsync<T>(()=>
-        {
-            try
-            {
-                try
-                {
-                    var res = methodFunc.Invoke();
-                    res.Wait();
-                    if (saveLog) res.Result.SaveLog();
-
-                    return res.Result;
-                }
-                catch ( Exception e )
-                {
-                    throw e.InnerException;
-                }
-            }
-            catch ( ReturningUnfinishedException e )
-            {
-                return ( Returning ) e.Result;
-            }
-            catch ( ReturningErrorException e )
-            {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
-            }
-            catch ( Exception e )
-            {
-                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
-
-                return error;
-            }
-        });
-    }
-
-    public static ReturningListAsync<T> TryTask<T>(Func<ReturningList<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, string logName = "",
-                                                   [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        return new ReturningListAsync<T>(()=>
-        {
-            try
-            {
-                var res = methodFunc.Invoke();
-                if (saveLog) res.SaveLog();
-
-                return res;
-            }
-            catch ( ReturningUnfinishedException e )
-            {
-                return ( Returning ) e.Result;
-            }
-            catch ( ReturningErrorException e )
-            {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : ( Returning ) e.Result;
-            }
-            catch ( Exception e )
-            {
-                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
-
-                return error;
-            }
-        });
-    }
-
-    #endregion
+    
 }

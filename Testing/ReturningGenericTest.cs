@@ -1,7 +1,6 @@
 using MgSoftDev.Returning;
 using MgSoftDev.Returning.Exceptions;
 using MgSoftDev.Returning.Helper;
-using MgSoftDev.Returning.Interfaces;
 
 namespace Testing;
 
@@ -13,13 +12,15 @@ public class ReturningGenericTest
     [ Test ]
     public void ReturnsCallsTest()
     {
-        Returning<string>               result  = Returning.Error("Ocurrio un Error");
-        Returning<int>               result2 = Returning.Unfinished("Valide los datos");
-        Returning<int>               result3 = Returning.Success(10);
-        Returning<int>               result4 = new ErrorInfo("Error 2");
-        Returning<int>               result5 = new UnfinishedInfo("Unfinished");
-        ReturningErrorException      result8 = new ReturningErrorException(( Returning ) new ErrorInfo("Error 2"));
-        ReturningUnfinishedException result9 = new ReturningUnfinishedException(( Returning ) new UnfinishedInfo("Unfinished"));
+        Returning<string>            result   = Returning.Error("Ocurrio un Error");
+        Returning<int>               result2  = Returning.Unfinished("Valide los datos");
+        Returning<int>               result3  = Returning.Success(10);
+        Returning<int>               result10 = Returning.Success().ToReturning<int>();
+        Returning<int>               result11 = Returning.Success(new List<string>()).ToReturning<int>();
+        Returning<int>               result4  = new ErrorInfo("Error 2");
+        Returning<int>               result5  = new UnfinishedInfo("Unfinished");
+        ReturningErrorException      result8  = new ReturningErrorException(( Returning ) new ErrorInfo("Error 2"));
+        ReturningUnfinishedException result9  = new ReturningUnfinishedException(( Returning ) new UnfinishedInfo("Unfinished"));
         Console.WriteLine("------------------------- From Error \n{0}", result);
         Console.WriteLine("------------------------- From Unfinished \n{0}", result2);
         Console.WriteLine("------------------------- From Success \n{0}", result3);
@@ -27,6 +28,8 @@ public class ReturningGenericTest
         Console.WriteLine("------------------------- UnfinishedInfo cast to IReturning \n{0}", result5);
         Console.WriteLine("------------------------- From ReturningErrorException \n{0}", result8);
         Console.WriteLine("------------------------- From ReturningUnfinishedException \n{0}", result9);
+        Console.WriteLine("------------------------- From Returning<T> \n{0}", result10);
+        Console.WriteLine("------------------------- From ReturningList<T> \n{0}", result11);
 
         Assert.Pass();
     }
@@ -71,25 +74,25 @@ public class ReturningGenericTest
     [ Test ]
     public void Try1()
     {
-        Returning<int> res = Returning.Try(()=>
+        Returning<int> res = Returning<int>.Try(()=>
         {
             Console.WriteLine("Some code...");
             return 10;
         });
         
-        var res2 = Returning.Try(()=>
+        Returning<int> res2 = Returning<int>.Try(()=>
         {
             throw new Exception("Generic Exception");
             return 10;
         });
         
-        var res3 = Returning.Try(()=>
+        Returning<int> res3 = Returning<int>.Try(()=>
         {
             Returning.Error("ReturningErrorException")
                      .Throw();
             return 10;
         });
-        var res4 = Returning.Try(()=>
+        Returning<int> res4 = Returning<int>.Try(()=>
         {
             Returning.Unfinished("ReturningUnfinishedException")
                      .Throw();
@@ -98,9 +101,9 @@ public class ReturningGenericTest
         
         Console.WriteLine(res.ToString());
         Assert.AreEqual(res.Ok, true);
-        Assert.AreEqual(res2.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res3.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res4.ResultType, IReturning.TypeResult.Unfinished);
+        Assert.AreEqual(res2.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res3.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res4.ResultType, Returning.TypeResult.Unfinished);
     }
     
     
@@ -108,7 +111,7 @@ public class ReturningGenericTest
     public async Task Try2()
     {
         Console.WriteLine("Start Call");
-        var res = await Returning.TryTask( async()=>
+        var res = await Returning<int>.TryTask( async()=>
         {
             Console.WriteLine("Start Some code...");
             await Task.Delay(2000);
@@ -118,21 +121,21 @@ public class ReturningGenericTest
         
         Console.WriteLine("End Call");
         
-        var res2 = await Returning.TryTask(async ()=>
+        Returning<int> res2 = await Returning<int>.TryTask(async ()=>
         {
             await Task.Delay(1000);
             throw new Exception("Generic Exception");
             return 10;
         });
         
-        var res3 = await Returning.TryTask(async ()=>
+        Returning<int> res3 = await Returning<int>.TryTask(async ()=>
         {
             await Task.Delay(1000);
             Returning.Error("ReturningErrorException")
                      .Throw();
             return 10;
         });
-        var res4 = await Returning.TryTask(async ()=>
+        Returning<int> res4 = await Returning<int>.TryTask(async ()=>
         {
             await Task.Delay(1000);
             Returning.Unfinished("ReturningUnfinishedException")
@@ -143,9 +146,9 @@ public class ReturningGenericTest
         
         Console.WriteLine(res4.ToString());
         Assert.AreEqual(res.Ok, true);
-        Assert.AreEqual(res2.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res3.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res4.ResultType, IReturning.TypeResult.Unfinished);
+        Assert.AreEqual(res2.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res3.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res4.ResultType, Returning.TypeResult.Unfinished);
     }
     
     
@@ -153,26 +156,26 @@ public class ReturningGenericTest
     public async Task Try3()
     {
         Console.WriteLine("Start Call");
-        var res = await Returning.TryTask( ()=>
+        Returning<int> res = await Returning<int>.TryTask( ()=>
         {
             return 10;
         });
         
         Console.WriteLine("End Call");
         
-        var res2 = await Returning.TryTask( ()=>
+        Returning<int> res2 = await Returning<int>.TryTask( ()=>
         {
             throw new Exception("Generic Exception");
             return 10;
         });
         
-        var res3 = await Returning.TryTask( ()=>
+        Returning<int> res3 = await Returning<int>.TryTask( ()=>
         {
             Returning.Error("ReturningErrorException")
                      .Throw();
             return 10;
         });
-        var res4 = await Returning.TryTask( ()=>
+        Returning<int> res4 = await Returning<int>.TryTask( ()=>
         {
             Returning.Unfinished("ReturningUnfinishedException")
                      .Throw();
@@ -182,33 +185,33 @@ public class ReturningGenericTest
         
         Console.WriteLine(res4.ToString());
         Assert.AreEqual(res.Ok, true);
-        Assert.AreEqual(res2.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res3.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res4.ResultType, IReturning.TypeResult.Unfinished);
+        Assert.AreEqual(res2.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res3.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res4.ResultType, Returning.TypeResult.Unfinished);
     }
     
     [ Test ]
     public void Try4()
     {
-        Returning<int> res = Returning.Try(()=>
+        Returning<int> res = Returning<int>.Try(()=>
         {
             Console.WriteLine("Some code...");
             return Returning.Success(10);
         });
         
-        var res2 = Returning.Try(()=>
+        Returning<int> res2 = Returning<int>.Try(()=>
         {
             throw new Exception("Generic Exception");
             return Returning.Success(10);
         });
         
-        var res3 = Returning.Try(()=>
+        Returning<int> res3 = Returning<int>.Try(()=>
         {
             Returning.Error("ReturningErrorException")
                      .Throw();
             return Returning.Success(10);
         });
-        var res4 = Returning.Try(()=>
+        Returning<int> res4 = Returning<int>.Try(()=>
         {
             Returning.Unfinished("ReturningUnfinishedException")
                      .Throw();
@@ -217,9 +220,9 @@ public class ReturningGenericTest
         
         Console.WriteLine(res.ToString());
         Assert.AreEqual(res.Ok, true);
-        Assert.AreEqual(res2.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res3.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res4.ResultType, IReturning.TypeResult.Unfinished);
+        Assert.AreEqual(res2.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res3.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res4.ResultType, Returning.TypeResult.Unfinished);
     }
 
     
@@ -227,7 +230,7 @@ public class ReturningGenericTest
     public async Task Try5()
     {
         Console.WriteLine("Start Call");
-        var res = await Returning.TryTask( async()=>
+        Returning<int> res = await Returning<int>.TryTask( async()=>
         {
             Console.WriteLine("Start Some code...");
             await Task.Delay(2000);
@@ -237,21 +240,21 @@ public class ReturningGenericTest
         
         Console.WriteLine("End Call");
         
-        var res2 = await Returning.TryTask(async ()=>
+        Returning<int> res2 = await Returning<int>.TryTask(async ()=>
         {
             await Task.Delay(1000);
             throw new Exception("Generic Exception");
             return Returning.Success(10);
         });
         
-        var res3 = await Returning.TryTask(async ()=>
+        Returning<int> res3 = await Returning<int>.TryTask(async ()=>
         {
             await Task.Delay(1000);
             Returning.Error("ReturningErrorException")
                      .Throw();
             return Returning.Success(10);
         });
-        var res4 = await Returning.TryTask(async ()=>
+        Returning<int> res4 = await Returning<int>.TryTask(async ()=>
         {
             await Task.Delay(1000);
             Returning.Unfinished("ReturningUnfinishedException")
@@ -263,34 +266,34 @@ public class ReturningGenericTest
     
         Console.WriteLine(res4.ToString());
         Assert.AreEqual(res.Ok, true);
-        Assert.AreEqual(res2.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res3.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res4.ResultType, IReturning.TypeResult.Unfinished);
+        Assert.AreEqual(res2.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res3.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res4.ResultType, Returning.TypeResult.Unfinished);
     }
     
     
     [ Test ]
     public async Task Try6()
     {
-        var res = await Returning.TryTask(()=>
+        Returning<int> res = await Returning<int>.TryTask(()=>
         {
             Console.WriteLine("Some code...");
             return Returning.Success(10);
         });
         
-        var res2 = await  Returning.TryTask(()=>
+        Returning<int> res2 = await  Returning<int>.TryTask(()=>
         {
             throw new Exception("Generic Exception");
             return Returning.Success(10);
         });
         
-        var res3 = await  Returning.TryTask(()=>
+        Returning<int> res3 = await  Returning<int>.TryTask(()=>
         {
             Returning.Error("ReturningErrorException")
                      .Throw();
             return Returning.Success(10);
         });
-        var res4 = await  Returning.TryTask(()=>
+        Returning<int> res4 = await  Returning<int>.TryTask(()=>
         {
             Returning.Unfinished("ReturningUnfinishedException")
                      .Throw();
@@ -300,8 +303,8 @@ public class ReturningGenericTest
        
         Console.WriteLine(res.ToString());
         Assert.AreEqual(res.Ok, true);
-        Assert.AreEqual(res2.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res3.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res4.ResultType, IReturning.TypeResult.Unfinished);
+        Assert.AreEqual(res2.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res3.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res4.ResultType, Returning.TypeResult.Unfinished);
     }
 }

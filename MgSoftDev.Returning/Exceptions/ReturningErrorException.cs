@@ -1,13 +1,11 @@
-﻿using MgSoftDev.Returning.Interfaces;
-
-namespace MgSoftDev.Returning.Exceptions
+﻿namespace MgSoftDev.Returning.Exceptions
 {
     public class ReturningErrorException : System.Exception
     {
         public ErrorInfo  Error  { get; set; }
-        public IReturning Result { get; set; }
+        public Returning Result { get; set; }
 
-        public ReturningErrorException(IReturning result)
+        public ReturningErrorException(Returning result)
         {
             Result = result;
             Error  = Result.ErrorInfo;

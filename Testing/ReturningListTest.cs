@@ -1,7 +1,6 @@
 using MgSoftDev.Returning;
 using MgSoftDev.Returning.Exceptions;
 using MgSoftDev.Returning.Helper;
-using MgSoftDev.Returning.Interfaces;
 
 namespace Testing;
 
@@ -16,6 +15,8 @@ public class ReturningListTest
         ReturningList<int>           result  = Returning.Error("Ocurrio un Error");
         ReturningList<int>           result2 = Returning.Unfinished("Valide los datos");
         ReturningList<int>           result3 = Returning.Success(new List<int>(){1,2,3});
+        ReturningList<int>           result10 = Returning.Success("").ToReturningList<int>();
+        ReturningList<int>           result11 = Returning.Success().ToReturningList<int>();
         ReturningList<int>           result4 = new ErrorInfo("Error 2");
         ReturningList<int>           result5 = new UnfinishedInfo("Unfinished");
         ReturningErrorException      result8 = new ReturningErrorException(( Returning ) new ErrorInfo("Error 2"));
@@ -27,6 +28,8 @@ public class ReturningListTest
         Console.WriteLine("------------------------- UnfinishedInfo cast to IReturning \n{0}", result5);
         Console.WriteLine("------------------------- From ReturningErrorException \n{0}", result8);
         Console.WriteLine("------------------------- From ReturningUnfinishedException \n{0}", result9);
+        Console.WriteLine("------------------------- From Returning<T> \n{0}", result10);
+        Console.WriteLine("------------------------- From ReturningList<T> \n{0}", result11);
 
         Assert.Pass();
     }
@@ -71,25 +74,25 @@ public class ReturningListTest
     [ Test ]
     public void Try1()
     {
-        ReturningList<int> res = Returning.Try(()=>
+        ReturningList<int> res =ReturningList<int>.Try(()=>
         {
             Console.WriteLine("Some code...");
             return new List<int>(){1,2,3};
         });
         
-        var res2 = Returning.Try(()=>
+        ReturningList<int> res2 =ReturningList<int>.Try(()=>
         {
             throw new Exception("Generic Exception");
             return new List<int>(){1,2,3};
         });
         
-        var res3 = Returning.Try(()=>
+        ReturningList<int> res3 =ReturningList<int>.Try(()=>
         {
             Returning.Error("ReturningErrorException")
                      .Throw();
             return new List<int>(){1,2,3};
         });
-        var res4 = Returning.Try(()=>
+        ReturningList<int> res4 =ReturningList<int>.Try(()=>
         {
             Returning.Unfinished("ReturningUnfinishedException")
                      .Throw();
@@ -98,9 +101,9 @@ public class ReturningListTest
         
         Console.WriteLine(res.ToString());
         Assert.AreEqual(res.Ok, true);
-        Assert.AreEqual(res2.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res3.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res4.ResultType, IReturning.TypeResult.Unfinished);
+        Assert.AreEqual(res2.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res3.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res4.ResultType, Returning.TypeResult.Unfinished);
     }
     
     
@@ -108,7 +111,7 @@ public class ReturningListTest
     public async Task Try2()
     {
         Console.WriteLine("Start Call");
-        var res = await Returning.TryTask( async()=>
+        ReturningList<int> res = await ReturningList<int>.TryTask( async()=>
         {
             Console.WriteLine("Start Some code...");
             await Task.Delay(2000);
@@ -118,21 +121,21 @@ public class ReturningListTest
         
         Console.WriteLine("End Call");
         
-        var res2 = await Returning.TryTask(async ()=>
+        ReturningList<int> res2 = await ReturningList<int>.TryTask(async ()=>
         {
             await Task.Delay(1000);
             throw new Exception("Generic Exception");
             return new List<int>(){1,2,3};
         });
         
-        var res3 = await Returning.TryTask(async ()=>
+        ReturningList<int> res3 = await ReturningList<int>.TryTask(async ()=>
         {
             await Task.Delay(1000);
             Returning.Error("ReturningErrorException")
                      .Throw();
             return new List<int>(){1,2,3};
         });
-        var res4 = await Returning.TryTask(async ()=>
+        ReturningList<int> res4 = await ReturningList<int>.TryTask(async ()=>
         {
             await Task.Delay(1000);
             Returning.Unfinished("ReturningUnfinishedException")
@@ -143,9 +146,9 @@ public class ReturningListTest
         
         Console.WriteLine(res4.ToString());
         Assert.AreEqual(res.Ok, true);
-        Assert.AreEqual(res2.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res3.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res4.ResultType, IReturning.TypeResult.Unfinished);
+        Assert.AreEqual(res2.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res3.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res4.ResultType, Returning.TypeResult.Unfinished);
     }
     
     
@@ -153,26 +156,26 @@ public class ReturningListTest
     public async Task Try3()
     {
         Console.WriteLine("Start Call");
-        var res = await Returning.TryTask( ()=>
+        ReturningList<int> res = await ReturningList<int>.TryTask( ()=>
         {
             return new List<int>(){1,2,3};
         });
         
         Console.WriteLine("End Call");
         
-        var res2 = await Returning.TryTask( ()=>
+        ReturningList<int> res2 = await ReturningList<int>.TryTask( ()=>
         {
             throw new Exception("Generic Exception");
             return new List<int>(){1,2,3};
         });
         
-        var res3 = await Returning.TryTask( ()=>
+        ReturningList<int> res3 = await ReturningList<int>.TryTask( ()=>
         {
             Returning.Error("ReturningErrorException")
                      .Throw();
             return new List<int>(){1,2,3};
         });
-        var res4 = await Returning.TryTask( ()=>
+        ReturningList<int> res4 = await ReturningList<int>.TryTask( ()=>
         {
             Returning.Unfinished("ReturningUnfinishedException")
                      .Throw();
@@ -182,33 +185,33 @@ public class ReturningListTest
         
         Console.WriteLine(res4.ToString());
         Assert.AreEqual(res.Ok, true);
-        Assert.AreEqual(res2.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res3.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res4.ResultType, IReturning.TypeResult.Unfinished);
+        Assert.AreEqual(res2.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res3.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res4.ResultType, Returning.TypeResult.Unfinished);
     }
     
     [ Test ]
     public void Try4()
     {
-        ReturningList<int> res = Returning.Try(()=>
+        ReturningList<int> res =ReturningList<int>.Try(()=>
         {
             Console.WriteLine("Some code...");
             return Returning.Success(new List<int>(){1,2,3});
         });
         
-        var res2 = Returning.Try(()=>
+        ReturningList<int> res2 =ReturningList<int>.Try(()=>
         {
             throw new Exception("Generic Exception");
             return Returning.Success(new List<int>(){1,2,3});
         });
         
-        var res3 = Returning.Try(()=>
+        ReturningList<int> res3 =ReturningList<int>.Try(()=>
         {
             Returning.Error("ReturningErrorException")
                      .Throw();
             return Returning.Success(new List<int>(){1,2,3});
         });
-        var res4 = Returning.Try(()=>
+        ReturningList<int> res4 =ReturningList<int>.Try(()=>
         {
             Returning.Unfinished("ReturningUnfinishedException")
                      .Throw();
@@ -217,9 +220,9 @@ public class ReturningListTest
         
         Console.WriteLine(res.ToString());
         Assert.AreEqual(res.Ok, true);
-        Assert.AreEqual(res2.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res3.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res4.ResultType, IReturning.TypeResult.Unfinished);
+        Assert.AreEqual(res2.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res3.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res4.ResultType, Returning.TypeResult.Unfinished);
     }
 
     
@@ -227,7 +230,7 @@ public class ReturningListTest
     public async Task Try5()
     {
         Console.WriteLine("Start Call");
-        var res = await Returning.TryTask( async()=>
+        ReturningList<int> res = await ReturningList<int>.TryTask( async()=>
         {
             Console.WriteLine("Start Some code...");
             await Task.Delay(2000);
@@ -237,21 +240,21 @@ public class ReturningListTest
         
         Console.WriteLine("End Call");
         
-        var res2 = await Returning.TryTask(async ()=>
+        ReturningList<int> res2 = await ReturningList<int>.TryTask(async ()=>
         {
             await Task.Delay(1000);
             throw new Exception("Generic Exception");
             return Returning.Success(new List<int>(){1,2,3});
         });
         
-        var res3 = await Returning.TryTask(async ()=>
+        ReturningList<int> res3 = await ReturningList<int>.TryTask(async ()=>
         {
             await Task.Delay(1000);
             Returning.Error("ReturningErrorException")
                      .Throw();
             return Returning.Success(new List<int>(){1,2,3});
         });
-        var res4 = await Returning.TryTask(async ()=>
+        ReturningList<int> res4 = await ReturningList<int>.TryTask(async ()=>
         {
             await Task.Delay(1000);
             Returning.Unfinished("ReturningUnfinishedException")
@@ -263,34 +266,34 @@ public class ReturningListTest
     
         Console.WriteLine(res4.ToString());
         Assert.AreEqual(res.Ok, true);
-        Assert.AreEqual(res2.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res3.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res4.ResultType, IReturning.TypeResult.Unfinished);
+        Assert.AreEqual(res2.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res3.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res4.ResultType, Returning.TypeResult.Unfinished);
     }
     
     
     [ Test ]
     public async Task Try6()
     {
-        var res = await Returning.TryTask(()=>
+        ReturningList<int> res = await ReturningList<int>.TryTask(()=>
         {
             Console.WriteLine("Some code...");
             return Returning.Success(new List<int>(){1,2,3});
         });
         
-        var res2 = await  Returning.TryTask(()=>
+        ReturningList<int> res2 = await ReturningList<int>.TryTask(()=>
         {
             throw new Exception("Generic Exception");
             return Returning.Success(new List<int>(){1,2,3});
         });
         
-        var res3 = await  Returning.TryTask(()=>
+        ReturningList<int> res3 = await ReturningList<int>.TryTask(()=>
         {
             Returning.Error("ReturningErrorException")
                      .Throw();
             return Returning.Success(new List<int>(){1,2,3});
         });
-        var res4 = await  Returning.TryTask(()=>
+        ReturningList<int> res4 = await ReturningList<int>.TryTask(()=>
         {
             Returning.Unfinished("ReturningUnfinishedException")
                      .Throw();
@@ -300,8 +303,8 @@ public class ReturningListTest
        
         Console.WriteLine(res.ToString());
         Assert.AreEqual(res.Ok, true);
-        Assert.AreEqual(res2.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res3.ResultType, IReturning.TypeResult.Error);
-        Assert.AreEqual(res4.ResultType, IReturning.TypeResult.Unfinished);
+        Assert.AreEqual(res2.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res3.ResultType, Returning.TypeResult.Error);
+        Assert.AreEqual(res4.ResultType, Returning.TypeResult.Unfinished);
     }
 }

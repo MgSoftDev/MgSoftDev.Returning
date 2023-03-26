@@ -42,13 +42,13 @@ namespace MgSoftDev.Returning
             Parameters   = parameters;
         }
 
-        public void Throw() { throw new ReturningErrorException((Returning)this); }
+        public void Throw() { throw new ReturningErrorException(this); }
 
 
         #region Overrides of Object
 
         public override string ToString() { return $"ErrorMessage:{ErrorMessage}\n"             +
-                                                   $"TryException:{TryException?.ToString()}\n" +
+                                                   $"TryException:{TryException}\n" +
                                                    $"ErrorCode:{ErrorCode}\n"                   +
                                                    $"Parameters{Parameters != null}\n"          +
                                                    $"MemberName:{MemberName}\n"                 +

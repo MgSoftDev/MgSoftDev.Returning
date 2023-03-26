@@ -4,6 +4,18 @@ namespace MgSoftDev.Returning.Helper
 {
     public static class Extension
     {
+        public static Returning<T> ToReturning<T>(this Returning value)=>
+        new ()
+        {
+            ErrorInfo      = value.ErrorInfo,
+            UnfinishedInfo = value.UnfinishedInfo
+        };
+        public static ReturningList<T> ToReturningList<T>(this Returning value)=>
+        new ()
+        {
+            ErrorInfo      = value.ErrorInfo,
+            UnfinishedInfo = value.UnfinishedInfo
+        };
         public static void OkNotNullAction<T>(this Returning<T> returning, Action<T> action )
         {
             if (returning.OkNotNull)

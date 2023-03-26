@@ -1,13 +1,11 @@
-﻿using MgSoftDev.Returning.Interfaces;
-
-namespace MgSoftDev.Returning.Exceptions
+﻿namespace MgSoftDev.Returning.Exceptions
 {
     public class ReturningUnfinishedException : System.Exception
     {
         public UnfinishedInfo Error  { get; set; }
-        public IReturning     Result { get; set; }
+        public Returning      Result { get; set; }
 
-        public ReturningUnfinishedException( IReturning result )
+        public ReturningUnfinishedException( Returning result )
         {
             Result = result;
             Error = Result.UnfinishedInfo;

@@ -2,7 +2,6 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MgSoftDev.Returning.Helper;
-using MgSoftDev.Returning.Interfaces;
 
 namespace MgSoftDev.Returning.Logger
 {
@@ -10,8 +9,8 @@ namespace MgSoftDev.Returning.Logger
     {
         object EventSource { get; set; }
         
-        bool       SaveLog(IReturning      returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource =null,  string logName = null);
-        Task<bool> SaveLogAsync(IReturning returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null);
+        bool       SaveLog(Returning      returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource =null,  string logName = null);
+        Task<bool> SaveLogAsync(Returning returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null);
 
 
 

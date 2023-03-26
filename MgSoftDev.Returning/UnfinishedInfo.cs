@@ -75,7 +75,7 @@ namespace MgSoftDev.Returning
             };
         }
 
-        public void Throw() { throw new ReturningUnfinishedException((Returning)this); }
+        public void Throw() { throw new ReturningUnfinishedException(this); }
         
         
         #region Overrides of Object

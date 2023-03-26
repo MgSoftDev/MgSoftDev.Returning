@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using MgSoftDev.Returning.Helper;
-using MgSoftDev.Returning.Interfaces;
 using MgSoftDev.Returning.Logger;
 using Serilog;
 using Serilog.Events;
@@ -15,7 +14,7 @@ namespace MgSoftDev.Returning.Serilog
         public object EventSource { get; set; } = new {Environment.MachineName };
 		#region Implementation of IReturningLoggerService
 
-		public bool SaveLog(IReturning returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
+		public bool SaveLog(Returning returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
 		{
 			try
 			{
@@ -52,7 +51,7 @@ namespace MgSoftDev.Returning.Serilog
 				return false;
 			}
 		}
-		public Task<bool> SaveLogAsync(IReturning returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
+		public Task<bool> SaveLogAsync(Returning returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
 		{
 			return Task.Run(() => SaveLog(returning, logLevel,eventSource, logName));
 		}
