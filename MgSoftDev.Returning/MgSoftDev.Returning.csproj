@@ -6,14 +6,17 @@
         <Authors>Miguel Fernando Garcias Salazar</Authors>
         <Copyright>MgSoftDev</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/MigeruGarcia/Returning</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/MigeruGarcia/Returning</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/MgSoftDev/MgSoftDev.Returning</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/MgSoftDev/MgSoftDev.Returning</RepositoryUrl>
         <AssemblyName>MgSoftDev.Returning</AssemblyName>
         <Company>MgSoftDev</Company>
         <RootNamespace>MgSoftDev.Returning</RootNamespace>
         <PackageTags>Returning</PackageTags>
         <Version>1.0.0</Version>
         <LangVersion>10</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <FileVersion>1.0.0</FileVersion>
     </PropertyGroup>
 
 </Project>
