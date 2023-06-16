@@ -1,4 +1,4 @@
-﻿namespace MgSoftDev.Returning.Helper
+﻿namespace MgSoftDev.ReturningCore.Helper
 {
     public static class ReturningEnums
     {

@@ -1,4 +1,4 @@
-﻿namespace MgSoftDev.Returning.Exceptions
+﻿namespace MgSoftDev.ReturningCore.Exceptions
 {
     public class ReturningErrorException : System.Exception
     {

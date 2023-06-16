@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using MgSoftDev.Returning.Helper;
+using MgSoftDev.ReturningCore.Helper;
 
-namespace MgSoftDev.Returning.Logger
+namespace MgSoftDev.ReturningCore.Logger
 {
     public interface IReturningLoggerService
     {

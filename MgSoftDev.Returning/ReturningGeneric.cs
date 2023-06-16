@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using MgSoftDev.Returning.Exceptions;
-using MgSoftDev.Returning.Helper;
+using MgSoftDev.ReturningCore.Exceptions;
+using MgSoftDev.ReturningCore.Helper;
+
 // ReSharper disable ExplicitCallerInfoArgument
 
-namespace MgSoftDev.Returning;
+namespace MgSoftDev.ReturningCore;
 
 
 public class Returning< T > : Returning

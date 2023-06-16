@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using System.Threading.Tasks;
-using MgSoftDev.Returning.Logger;
+using MgSoftDev.ReturningCore.Logger;
 
-namespace MgSoftDev.Returning.Helper
+namespace MgSoftDev.ReturningCore.Helper
 {
     public static class ReturningLoggerException
     {

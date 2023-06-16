@@ -1,4 +1,4 @@
-﻿namespace MgSoftDev.Returning.Logger
+﻿namespace MgSoftDev.ReturningCore.Logger
 {
     public static class ReturningLogger
     {

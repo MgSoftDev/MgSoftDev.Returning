@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MgSoftDev.Returning;
+namespace MgSoftDev.ReturningCore;
 
 public class ReturningAsync : Task<Returning>
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MgSoftDev.Returning.Helper
+namespace MgSoftDev.ReturningCore.Helper
 {
     public static class Extension
     {

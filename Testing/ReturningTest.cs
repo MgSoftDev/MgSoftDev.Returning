@@ -1,6 +1,8 @@
-using MgSoftDev.Returning;
-using MgSoftDev.Returning.Exceptions;
-using MgSoftDev.Returning.Helper;
+
+
+using MgSoftDev.ReturningCore;
+using MgSoftDev.ReturningCore.Exceptions;
+using MgSoftDev.ReturningCore.Helper;
 
 namespace Testing;
 

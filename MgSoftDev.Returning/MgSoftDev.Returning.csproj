@@ -8,15 +8,15 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/MgSoftDev/MgSoftDev.Returning</PackageProjectUrl>
         <RepositoryUrl>https://github.com/MgSoftDev/MgSoftDev.Returning</RepositoryUrl>
-        <AssemblyName>MgSoftDev.Returning</AssemblyName>
         <Company>MgSoftDev</Company>
-        <RootNamespace>MgSoftDev.Returning</RootNamespace>
+        <RootNamespace>MgSoftDev.ReturningCore</RootNamespace>
         <PackageTags>Returning</PackageTags>
-        <Version>1.0.0</Version>
+        <Version>1.0.2</Version>
         <LangVersion>10</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <AssemblyVersion>1.0.0</AssemblyVersion>
-        <FileVersion>1.0.0</FileVersion>
+        <AssemblyVersion>1.0.2</AssemblyVersion>
+        <FileVersion>1.0.2</FileVersion>
+        <PackageId>MgSoftDev.Returning</PackageId>
     </PropertyGroup>
 
 </Project>

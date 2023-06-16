@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using MgSoftDev.Returning.Helper;
-using MgSoftDev.Returning.Logger;
+using MgSoftDev.ReturningCore.Helper;
+using MgSoftDev.ReturningCore.Logger;
 using Serilog;
 using Serilog.Events;
 
-namespace MgSoftDev.Returning.Serilog
+namespace MgSoftDev.ReturningCore.Serilog
 {
 
 	public class SerilogReturningLoggerService : IReturningLoggerService
@@ -14,7 +14,7 @@ namespace MgSoftDev.Returning.Serilog
         public object EventSource { get; set; } = new {Environment.MachineName };
 		#region Implementation of IReturningLoggerService
 
-		public bool SaveLog(Returning returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
+		public bool SaveLog( Returning returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
 		{
 			try
 			{

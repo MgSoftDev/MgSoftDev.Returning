@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using MgSoftDev.Returning.Exceptions;
+using MgSoftDev.ReturningCore.Exceptions;
 
-namespace MgSoftDev.Returning
+namespace MgSoftDev.ReturningCore
 {
     public class ErrorInfo
     {
