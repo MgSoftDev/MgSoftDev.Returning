@@ -22,7 +22,7 @@ public partial class Returning
     public UnfinishedInfo        UnfinishedInfo { get; internal set; }
     public ErrorInfo             ErrorInfo      { get; internal set; }
     public bool                  IsLogStored    { get; internal set; }
-    public Exception             LogException   { get;  set; }
+    public ErrorInfoException             LogException   { get;  set; }
     public bool                  Ok             =>ErrorInfo == null && UnfinishedInfo == null;
     public TypeResult ResultType     =>Ok ? TypeResult.Success : ( ErrorInfo != null ? TypeResult.Error : TypeResult.Unfinished );
 

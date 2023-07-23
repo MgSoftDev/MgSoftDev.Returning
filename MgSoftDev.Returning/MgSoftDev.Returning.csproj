@@ -11,11 +11,11 @@
         <Company>MgSoftDev</Company>
         <RootNamespace>MgSoftDev.ReturningCore</RootNamespace>
         <PackageTags>Returning</PackageTags>
-        <Version>1.0.2</Version>
+        <Version>1.0.4</Version>
         <LangVersion>10</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <AssemblyVersion>1.0.2</AssemblyVersion>
-        <FileVersion>1.0.2</FileVersion>
+        <AssemblyVersion>1.0.4</AssemblyVersion>
+        <FileVersion>1.0.4</FileVersion>
         <PackageId>MgSoftDev.Returning</PackageId>
     </PropertyGroup>
 

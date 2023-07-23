@@ -44,17 +44,73 @@ namespace MgSoftDev.ReturningCore.Helper
 
         public static Returning Optimize(this Returning value)
         {
-            if (value.ErrorInfo!= null)
-                value.ErrorInfo.TryException = new Exception(value.ErrorInfo?.TryException?.Message);
-        
+            OptimizeInternal(value);
             return value;
         }
         public static Returning<T> Optimize<T>(this Returning<T> value)
         {
-            if (value.ErrorInfo != null)
-                value.ErrorInfo.TryException = new Exception(value.ErrorInfo?.TryException?.Message);
-        
+            OptimizeInternal(value);
             return value;
+        }
+        public static ReturningList<T> Optimize<T>(this ReturningList<T> value)
+        {
+            OptimizeInternal(value);
+            return value;
+        }
+        public static Returning Anonymous(this Returning value)
+        {
+            AnonymousInternal(value);
+            return value;
+        }
+        public static Returning<T> Anonymous<T>(this Returning<T> value)
+        {
+            AnonymousInternal(value);
+            return value;
+        }
+        public static ReturningList<T> Anonymous<T>(this ReturningList<T> value)
+        {
+            AnonymousInternal(value);
+            return value;
+        }
+
+
+        private static void AnonymousInternal(Returning value)
+        {
+            if (value.ErrorInfo != null)
+            {
+                value.ErrorInfo.MemberName   = null;
+                value.ErrorInfo.FilePath     = null;
+                value.ErrorInfo.LineNumber   = 0;
+                value.ErrorInfo.Parameters   = null;
+                value.ErrorInfo.TryException = null;
+            }
+
+            if (value.UnfinishedInfo != null)
+            {
+                value.UnfinishedInfo.Parameters = null;
+            }
+            
+            value.LogException = null;
+        }
+        private static void OptimizeInternal(Returning value)
+        {
+            if (value.ErrorInfo != null)
+            {
+                value.ErrorInfo.Parameters   = null;
+                if(value.ErrorInfo.TryException!= null)
+                {
+                    value.ErrorInfo.TryException.StackTrace = null;
+                    value.ErrorInfo.TryException.InnerException = null;
+                }
+                
+            }
+
+            if (value.UnfinishedInfo != null)
+            {
+                value.UnfinishedInfo.Parameters = null;
+            }
+            
+            value.LogException = null;
         }
     }
 }

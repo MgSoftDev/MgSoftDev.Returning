@@ -9,13 +9,13 @@ namespace MgSoftDev.ReturningCore
         public const string UnhandledError = "UnhandledError";
 
 
-        public string    ErrorMessage { get; set; }
-        public string    ErrorCode    { get; set; }
-        public string    MemberName   { get; set; }
-        public string    FilePath     { get; set; }
-        public int       LineNumber   { get; set; }
-        public Exception TryException { get; set; }
-        public object    Parameters   { get; set; }
+        public string             ErrorMessage { get; set; }
+        public string             ErrorCode    { get; set; }
+        public string             MemberName   { get; set; }
+        public string             FilePath     { get; set; }
+        public int                LineNumber   { get; set; }
+        public ErrorInfoException TryException { get; set; }
+        public object             Parameters   { get; set; }
 
         public ErrorInfo() { }
 
@@ -23,7 +23,7 @@ namespace MgSoftDev.ReturningCore
                          [ CallerLineNumber ] int lineNumber = 0)
         {
             ErrorMessage = errorMessage;
-            TryException = tryException;
+            TryException = new ErrorInfoException(tryException);
             MemberName   = memberName;
             FilePath     = filePath;
             LineNumber   = lineNumber;
@@ -34,7 +34,7 @@ namespace MgSoftDev.ReturningCore
                          [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
         {
             ErrorMessage = errorMessage;
-            TryException = tryException;
+            TryException = new ErrorInfoException(tryException);
             MemberName   = memberName;
             FilePath     = filePath;
             LineNumber   = lineNumber;
@@ -57,5 +57,34 @@ namespace MgSoftDev.ReturningCore
         }
 
         #endregion
+    }
+
+    public class ErrorInfoException
+    {
+        public ErrorInfoException(Exception ex)
+        {
+            Message = ex.Message;
+            Source  = ex.Source;
+            StackTrace = ex.StackTrace;
+            ExceptionType = ex.GetType().FullName;
+            if (ex.InnerException != null)
+                InnerException = new ErrorInfoException()
+                {
+                    Message = ex.InnerException.Message,
+                    Source  = ex.InnerException.Source,
+                    StackTrace = ex.InnerException.StackTrace,
+                    ExceptionType = ex.InnerException.GetType().FullName,
+                };
+        }
+
+        public ErrorInfoException()
+        {
+            
+        }
+        public string             Message        { get; set; }
+        public string             Source         { get; set; }
+        public string             StackTrace     { get; set; }
+        public string             ExceptionType  { get; set; }
+        public ErrorInfoException InnerException { get; set; }
     }
 }

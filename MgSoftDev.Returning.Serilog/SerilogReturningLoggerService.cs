@@ -46,7 +46,7 @@ namespace MgSoftDev.ReturningCore.Serilog
 			}
 			catch (Exception ex)
 			{
-				returning.LogException = ex;
+				returning.LogException = new ErrorInfoException(ex);
 
 				return false;
 			}
