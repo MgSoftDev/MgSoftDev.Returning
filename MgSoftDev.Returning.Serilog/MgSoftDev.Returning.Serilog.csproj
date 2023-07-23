@@ -12,11 +12,11 @@
         <PackageProjectUrl>https://github.com/MgSoftDev/MgSoftDev.Returning</PackageProjectUrl>
         <RepositoryUrl>https://github.com/MgSoftDev/MgSoftDev.Returning</RepositoryUrl>
         <PackageTags>Returning, Serilog</PackageTags>
-        <Version>1.1.1</Version>
+        <Version>1.1.2</Version>
         <LangVersion>10</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <AssemblyVersion>1.1.1</AssemblyVersion>
-        <FileVersion>1.1.1</FileVersion>
+        <AssemblyVersion>1.1.2</AssemblyVersion>
+        <FileVersion>1.1.2</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,8 +24,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="MgSoftDev.Returning" Version="1.0.2" />
-      <PackageReference Include="Serilog" Version="2.12.0" />
+      <PackageReference Include="MgSoftDev.Returning" Version="1.0.4" />
+      <PackageReference Include="Serilog" Version="3.0.1" />
     </ItemGroup>
 
 </Project>
