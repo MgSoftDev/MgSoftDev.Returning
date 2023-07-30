@@ -19,9 +19,9 @@ public partial class Returning
     }
     #region Property
 
-    public UnfinishedInfo        UnfinishedInfo { get; internal set; }
-    public ErrorInfo             ErrorInfo      { get; internal set; }
-    public bool                  IsLogStored    { get; internal set; }
+    public UnfinishedInfo        UnfinishedInfo { get;  set; }
+    public ErrorInfo             ErrorInfo      { get;  set; }
+    public bool                  IsLogStored    { get;  set; }
     public ErrorInfoException             LogException   { get;  set; }
     public bool                  Ok             =>ErrorInfo == null && UnfinishedInfo == null;
     public TypeResult ResultType     =>Ok ? TypeResult.Success : ( ErrorInfo != null ? TypeResult.Error : TypeResult.Unfinished );
@@ -153,7 +153,7 @@ public partial class Returning
     {
         try
         {
-            methodAction.Invoke();
+            methodAction?.Invoke();
     
             return Success();
         }
@@ -183,18 +183,16 @@ public partial class Returning
     /// <param name="filePath"></param>
     /// <param name="lineNumber"></param>
     /// <returns></returns>
-    public static ReturningAsync TryTask(Func<Task> methodAction, bool saveLog = false, string errorName = "Unhandled error", string errorCode = "ErrorInfo.UnhandledError", string logName = "",
-                                         [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    public static Task<Returning> TryTask(Func<Task> methodAction, bool saveLog = false, string errorName = "Unhandled error", string errorCode = "ErrorInfo.UnhandledError", string logName = "",
+                                          [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
-        return new ReturningAsync(()=>
+        return Task.Run<Returning>(async ()=>
         {
             try
             {
                 try
                 {
-                    var task = methodAction.Invoke();
-                    task.Wait();
-
+                    await methodAction.Invoke();
                     return Success();
                 }
                 catch ( Exception e )
@@ -233,14 +231,14 @@ public partial class Returning
     /// <param name="filePath"></param>
     /// <param name="lineNumber"></param>
     /// <returns></returns>
-    public static ReturningAsync TryTask(Action methodAction, bool saveLog = false, string errorName = "Unhandled error", string errorCode = "ErrorInfo.UnhandledError", string logName = "",
-                                         [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    public static Task<Returning> TryTask(Action methodAction, bool saveLog = false, string errorName = "Unhandled error", string errorCode = "ErrorInfo.UnhandledError", string logName = "",
+                                          [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
-        return new ReturningAsync(()=>
+        return Task.Run<Returning>(()=>
         {
             try
             {
-                methodAction?.Invoke();
+                methodAction.Invoke();
 
                 return Success();
             }
@@ -306,18 +304,16 @@ public partial class Returning
     /// <param name="filePath"></param>
     /// <param name="lineNumber"></param>
     /// <returns></returns>
-    public static ReturningAsync TryTask(Func<Task<Returning>> methodAction, bool saveLog = false, string errorName = "Unhandled error", string errorCode = "ErrorInfo.UnhandledError",
-                                         string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    public static Task<Returning> TryTask(Func<Task<Returning>> methodAction, bool saveLog = false, string errorName = "Unhandled error", string errorCode = "ErrorInfo.UnhandledError",
+                                          string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
-        return new ReturningAsync(()=>
+        return Task.Run<Returning>(async ()=>
         {
             try
             {
                 try
                 {
-                    var task = methodAction.Invoke();
-                    task.Wait();
-                    var res = task.Result;
+                    var res = await methodAction.Invoke();
                     if (saveLog) res.SaveLog();
 
                     return res;
@@ -357,10 +353,10 @@ public partial class Returning
     /// <param name="filePath"></param>
     /// <param name="lineNumber"></param>
     /// <returns></returns>
-    public static ReturningAsync TryTask(Func<Returning> methodAction, bool saveLog = false, string errorName = "Unhandled error", string errorCode = "ErrorInfo.UnhandledError", string logName = "",
-                                         [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    public static Task<Returning> TryTask(Func<Returning> methodAction, bool saveLog = false, string errorName = "Unhandled error", string errorCode = "ErrorInfo.UnhandledError", string logName = "",
+                                          [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
-        return new ReturningAsync(()=>
+        return Task.Run<Returning>(()=>
         {
             try
             {

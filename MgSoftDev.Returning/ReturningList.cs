@@ -13,7 +13,7 @@ public class ReturningList< T > : Returning
 {
     #region Property
 
-    public List<T> Value { get; internal set; }
+    public List<T> Value { get;  set; }
 
     public bool OkNotNull=>Ok && Value != null;
 
@@ -79,20 +79,18 @@ public class ReturningList< T > : Returning
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public static ReturningListAsync<T> TryTask(Func<Task<List<T>>>      methodFunc,      bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
+    public static Task<ReturningList<T>> TryTask(Func<Task<List<T>>>      methodFunc,      bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
                                                      string                   logName    = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
                                                      [ CallerLineNumber ] int lineNumber = 0)
     {
-        return new ReturningListAsync<T>(()=>
+        return Task<ReturningList<T>>.Run(async ()=>
         {
             try
             {
                 try
                 {
-                    var invoke = methodFunc.Invoke();
-                    invoke.Wait();
-
-                    return Success(invoke.Result);
+                    var invoke = await methodFunc.Invoke();
+                    return Success(invoke);
                 }
                 catch ( Exception e )
                 {
@@ -133,11 +131,11 @@ public class ReturningList< T > : Returning
     /// <param name="lineNumber"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static ReturningListAsync<T> TryTask(Func<List<T>>            methodFunc,      bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
-                                                     string                   logName    = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
-                                                     [ CallerLineNumber ] int lineNumber = 0)
+    public static Task<ReturningList<T>> TryTask(Func<List<T>>            methodFunc,      bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
+                                                 string                   logName    = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
+                                                 [ CallerLineNumber ] int lineNumber = 0)
     {
-        return new ReturningListAsync<T>(()=>
+        return Task<ReturningList<T>>.Run(()=>
         {
             try
             {
@@ -212,21 +210,20 @@ public class ReturningList< T > : Returning
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public static ReturningListAsync<T> TryTask(Func<Task<ReturningList<T>>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
-                                                     string                       logName    = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
-                                                     [ CallerLineNumber ] int     lineNumber = 0)
+    public static Task<ReturningList<T>> TryTask(Func<Task<ReturningList<T>>> methodFunc,      bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
+                                                 string                       logName    = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
+                                                 [ CallerLineNumber ] int     lineNumber = 0)
     {
-        return new ReturningListAsync<T>(()=>
+        return Task<ReturningList<T>>.Run(async ()=>
         {
             try
             {
                 try
                 {
-                    var res = methodFunc.Invoke();
-                    res.Wait();
-                    if (saveLog) res.Result.SaveLog();
+                    var res = await methodFunc.Invoke();
+                    if (saveLog) res.SaveLog();
 
-                    return res.Result;
+                    return res;
                 }
                 catch ( Exception e )
                 {
@@ -267,11 +264,11 @@ public class ReturningList< T > : Returning
     /// <param name="lineNumber"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static ReturningListAsync<T> TryTask(Func<ReturningList<T>>   methodFunc,      bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
-                                                     string                   logName    = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
-                                                     [ CallerLineNumber ] int lineNumber = 0)
+    public static Task<ReturningList<T>> TryTask(Func<ReturningList<T>>   methodFunc,      bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
+                                                 string                   logName    = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
+                                                 [ CallerLineNumber ] int lineNumber = 0)
     {
-        return new ReturningListAsync<T>(()=>
+        return Task<ReturningList<T>>.Run(()=>
         {
             try
             {
