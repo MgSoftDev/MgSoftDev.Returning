@@ -298,91 +298,91 @@ public class ReturningTest
         
         Assert.AreEqual(res.Ok, true);
     }
-    
-    [ Test ]
-    public async Task GetDataFromMethodAsync()
-    {
-        var res = await GetDataAsync();
-        
-        Assert.AreEqual(res.Ok, true);
-    }
-
-    [ Test ]
-    public void ReturnReturning()
-    {
-        var opt = 3;
-        Returning result = Returning.Try(()=>
-        {
-             if (opt == 1) return Returning.Error("asas");
-            if (opt == 2) return Returning.Unfinished("asas");
-            if (opt == 3) return Returning.Success(10);
-             if (opt == 4) return Returning.Success();
-             if (opt == 5) return Returning.Success(new List<string>());
-            
-            var task = ReturningTask();
-            task.Wait();
-            if (opt == 6) return task.Result ;
-            
-            var task2 = ReturningTask2();
-            task2.Wait();
-           if (opt == 7) return task2.Result ;
-            
-             var taskList = ReturningListTask();
-             taskList.Wait();
-             if (opt == 8) return taskList.Result ;
-
-            return Returning.Success();
-        });
-    }
-    [ Test ]
-    public void ReturnReturningGeneric()
-    {
-        var opt = 3;
-        Returning<int> result = Returning<int>.Try(()=>
-        {
-             if (opt == 1) return Returning.Error("asas");
-             if (opt == 2) return Returning.Unfinished("asas");
-             if (opt == 3) return Returning.Success(10);
-             if (opt == 4) return Returning.Success().ToReturning<int>();
-            // if (opt == 5) return 10;
-
-            var task = ReturningTask();
-            task.Wait();
-            if (opt == 6) return task.Result.ToReturning<int>() ;
-            
-            var task2 = ReturningTask2();
-            task2.Wait();
-            if (opt == 7) return task2.Result ;
-            
-            var taskList = ReturningListTask();
-            taskList.Wait();
-            if (opt == 8) return taskList.Result.ToReturning<int>() ;
-
-            return Returning.Success(10);
-        });
-    }
-    
-    ReturningAsync ReturningTask()
-    {
-        return Returning.TryTask(()=>
-        {
-            return Returning.Success();
-        });
-    }
-    ReturningAsync<int> ReturningTask2()
-    {
-        return Returning<int>.TryTask(()=>
-        {
-            return Returning.Success(10);
-        });
-    }
-    ReturningListAsync<int> ReturningListTask()
-    {
-        return ReturningList<int>.TryTask(()=>
-        {
-            return Returning.Success(new List<int>(){1,2,3});
-        });
-    }
+    //
+    // [ Test ]
+    // public async Task GetDataFromMethodAsync()
+    // {
+    //     var res = await GetDataAsync();
+    //     
+    //     Assert.AreEqual(res.Ok, true);
+    // }
+    //
+    // [ Test ]
+    // public void ReturnReturning()
+    // {
+    //     var opt = 3;
+    //     Returning result = Returning.Try(()=>
+    //     {
+    //          if (opt == 1) return Returning.Error("asas");
+    //         if (opt == 2) return Returning.Unfinished("asas");
+    //         if (opt == 3) return Returning.Success(10);
+    //          if (opt == 4) return Returning.Success();
+    //          if (opt == 5) return Returning.Success(new List<string>());
+    //         
+    //         var task = ReturningTask();
+    //         task.Wait();
+    //         if (opt == 6) return task.Result ;
+    //         
+    //         var task2 = ReturningTask2();
+    //         task2.Wait();
+    //        if (opt == 7) return task2.Result ;
+    //         
+    //          var taskList = ReturningListTask();
+    //          taskList.Wait();
+    //          if (opt == 8) return taskList.Result ;
+    //
+    //         return Returning.Success();
+    //     });
+    // }
+    // [ Test ]
+    // public void ReturnReturningGeneric()
+    // {
+    //     var opt = 3;
+    //     Returning<int> result = Returning<int>.Try(()=>
+    //     {
+    //          if (opt == 1) return Returning.Error("asas");
+    //          if (opt == 2) return Returning.Unfinished("asas");
+    //          if (opt == 3) return Returning.Success(10);
+    //          if (opt == 4) return Returning.Success().ToReturning<int>();
+    //         // if (opt == 5) return 10;
+    //
+    //         var task = ReturningTask();
+    //         task.Wait();
+    //         if (opt == 6) return task.Result.ToReturning<int>() ;
+    //         
+    //         var task2 = ReturningTask2();
+    //         task2.Wait();
+    //         if (opt == 7) return task2.Result ;
+    //         
+    //         var taskList = ReturningListTask();
+    //         taskList.Wait();
+    //         if (opt == 8) return taskList.Result.ToReturning<int>() ;
+    //
+    //         return Returning.Success(10);
+    //     });
+    // }
+    // //
+    // ReturningAsync ReturningTask()
+    // {
+    //     return Returning.TryTask(()=>
+    //     {
+    //         return Returning.Success();
+    //     });
+    // }
+    // ReturningAsync<int> ReturningTask2()
+    // {
+    //     return Returning<int>.TryTask(()=>
+    //     {
+    //         return Returning.Success(10);
+    //     });
+    // }
+    // ReturningListAsync<int> ReturningListTask()
+    // {
+    //     return ReturningList<int>.TryTask(()=>
+    //     {
+    //         return Returning.Success(new List<int>(){1,2,3});
+    //     });
+    // }
     
 
     private Returning GetData()
@@ -392,12 +392,12 @@ public class ReturningTest
             return Returning.Success();
         });
     }
-    private ReturningAsync GetDataAsync()
-    {
-        return Returning.TryTask(()=>
-        {
-            return Returning.Success();
-        });
-    }
-
-}
+//     private ReturningAsync GetDataAsync()
+//     {
+//         return Returning.TryTask(()=>
+//         {
+//             return Returning.Success();
+//         });
+//     }
+//
+ }

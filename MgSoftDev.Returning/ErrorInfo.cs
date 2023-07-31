@@ -63,6 +63,8 @@ namespace MgSoftDev.ReturningCore
     {
         public ErrorInfoException(Exception ex)
         {
+            if(ex== null)
+                return;
             Message = ex.Message;
             Source  = ex.Source;
             StackTrace = ex.StackTrace;
