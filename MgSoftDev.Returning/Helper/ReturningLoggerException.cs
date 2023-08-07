@@ -36,6 +36,56 @@ namespace MgSoftDev.ReturningCore.Helper
             return obj;
         }
         
+        public static Returning<T> SaveLog<T>(this Returning<T> returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
+        {
+            if (returning == null || returning.IsLogStored || ReturningLogger.LoggerService == null) return returning;
+            logName = logName ?? Assembly.GetCallingAssembly().GetName().Name;
+            ((Returning)returning).SaveLog(logLevel, eventSource, logName);
+
+            return returning;
+
+        }
+        public static async Task<Returning<T>> SaveLogAsync< T >(this Returning<T> returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null,
+                                                                 string            logName = null)
+        {
+            if (returning == null || returning.IsLogStored || ReturningLogger.LoggerService == null) return returning;
+        
+            logName = logName ??
+                      Assembly.GetCallingAssembly()
+                              .GetName()
+                              .Name;
+            await ((Returning)returning).SaveLogAsync(logLevel, eventSource, logName);
+
+            return returning;
+
+        }
+        
+        
+        public static ReturningList<T> SaveLog<T>(this ReturningList<T> returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
+        {
+            if (returning == null || returning.IsLogStored || ReturningLogger.LoggerService == null) return returning;
+            logName = logName ?? Assembly.GetCallingAssembly().GetName().Name;
+            ((Returning)returning).SaveLog(logLevel, eventSource, logName);
+
+            return returning;
+
+        }
+        public static async Task<ReturningList<T>> SaveLogAsync< T >(this ReturningList<T> returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null,
+                                                                     string                logName = null)
+        {
+            if (returning == null || returning.IsLogStored || ReturningLogger.LoggerService == null) return returning;
+        
+            logName = logName ??
+                      Assembly.GetCallingAssembly()
+                              .GetName()
+                              .Name;
+             await ( (Returning)returning ).SaveLogAsync(logLevel, eventSource, logName);
+
+             return returning;
+
+        }
+        
+        
         public static ErrorInfo SaveLog(this ErrorInfo error, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
         {
             if (error == null || ReturningLogger.LoggerService == null) return error;
@@ -89,50 +139,6 @@ namespace MgSoftDev.ReturningCore.Helper
             return unfinished;
         }
         
-        public static Returning<T> SaveLog<T>(this Returning<T> returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
-        {
-            if (returning == null || returning.IsLogStored || ReturningLogger.LoggerService == null) return returning;
-            logName = logName ?? Assembly.GetCallingAssembly().GetName().Name;
-            return returning.SaveLog(logLevel, eventSource, logName);
-        
-        }
-        public static async Task<Returning<T>> SaveLogAsync< T >(this Returning<T> returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null,
-                                                                 string            logName = null)
-        {
-            if (returning == null || returning.IsLogStored || ReturningLogger.LoggerService == null) return returning;
-        
-            logName = logName ??
-                      Assembly.GetCallingAssembly()
-                              .GetName()
-                              .Name;
-          return  await returning.SaveLogAsync(logLevel, eventSource, logName);
-        
-        }
-        
-        
-        public static ReturningList<T> SaveLog<T>(this ReturningList<T> returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
-        {
-            if (returning == null || returning.IsLogStored || ReturningLogger.LoggerService == null) return returning;
-            logName = logName ?? Assembly.GetCallingAssembly().GetName().Name;
-            ((Returning)returning).SaveLog(logLevel, eventSource, logName);
-
-            return returning;
-
-        }
-        public static async Task<ReturningList<T>> SaveLogAsync< T >(this ReturningList<T> returning, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null,
-                                                                     string                logName = null)
-        {
-            if (returning == null || returning.IsLogStored || ReturningLogger.LoggerService == null) return returning;
-        
-            logName = logName ??
-                      Assembly.GetCallingAssembly()
-                              .GetName()
-                              .Name;
-             await ( (Returning)returning ).SaveLogAsync(logLevel, eventSource, logName);
-
-             return returning;
-
-        }
         
     }
 }
