@@ -253,7 +253,7 @@ public class Returning< T > : Returning
     public static Task<Returning<T>> TryTask(Func<Returning<T>> methodFunc, bool saveLog = false, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError,
                                              string logName = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
-        return new Task<Returning<T>>(()=>
+        return Task<Returning<T>>.Run(()=>
         {
             try
             {
