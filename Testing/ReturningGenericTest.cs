@@ -67,7 +67,24 @@ public class ReturningGenericTest
         Assert.Pass();
     }
 
-    
+
+    // public Returning<int> GetReturningGeneric()
+    // {
+    //     if (DateTime.Now.Day == 1) return Returning.Error("asd");
+    //
+    //     var res = GetReturning();
+    //
+    //     if (!res.Ok) return res;
+    //
+    //     return 5;
+    // } 
+    //
+    // public Returning GetReturning()
+    // {
+    //     
+    //     return Returning.Success();
+    //     
+    // }
 
     
     

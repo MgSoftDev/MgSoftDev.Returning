@@ -11,6 +11,8 @@ namespace MgSoftDev.ReturningCore;
 
 public class Returning< T > : Returning
 {
+    
+    
     #region Property
 
     public T    Value    { get;  set; }
@@ -309,8 +311,7 @@ public class Returning< T > : Returning
         {
             UnfinishedInfo = value
         };
-    
-  
+
 
     #endregion
 
