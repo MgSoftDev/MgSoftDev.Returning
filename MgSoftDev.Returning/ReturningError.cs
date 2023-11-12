@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace MgSoftDev.ReturningCore;
 
-public class ReturningError
+internal class ReturningError
 {
     #region Ctor
     

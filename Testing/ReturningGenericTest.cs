@@ -67,24 +67,284 @@ public class ReturningGenericTest
         Assert.Pass();
     }
 
+    public Returning TryGetReturningOnly()
+    {
+        return Returning.Try(()=>
+        {
+            if (DateTime.Now.Day == 1) return Returning.Error("asd");
 
-    // public Returning<int> GetReturningGeneric()
-    // {
-    //     if (DateTime.Now.Day == 1) return Returning.Error("asd");
-    //
-    //     var res = GetReturning();
-    //
-    //     if (!res.Ok) return res;
-    //
-    //     return 5;
-    // } 
-    //
-    // public Returning GetReturning()
-    // {
-    //     
-    //     return Returning.Success();
-    //     
-    // }
+            var res = GetReturning();
+
+            if (!res.Ok) return res;
+
+            var str1 = GetReturningInt();
+
+            if (!str1.Ok) return str1;
+
+            var strList1 = GetReturningLISTInt();
+
+            if (!strList1.Ok) return strList1;
+
+            var str = GetReturningString();
+
+            if (!str.Ok) return str.ToReturning<int>();
+
+            var strList = GetReturningLISTString();
+
+            if (!strList.Ok) return strList.ToReturning<int>();
+
+            return Returning.Success();
+        });
+    } 
+    public Returning<int> TryGetReturningGeneric()
+    {
+        return Returning<int>.Try(()=>
+        {
+            if (DateTime.Now.Day == 1) return Returning.Error("asd");
+            if (DateTime.Now.Day == 2) return Returning.Success(2);
+
+            var res = GetReturning();
+
+            if (!res.Ok) return res;
+
+            var str1 = GetReturningInt();
+
+            if (!str1.Ok) return str1;
+
+            var strList1 = GetReturningLISTInt();
+
+            if (!strList1.Ok) return strList1;
+
+            var str = GetReturningString();
+
+            if (!str.Ok) return str.ToReturning<int>();
+
+            var strList = GetReturningLISTString();
+
+            if (!strList.Ok) return strList.ToReturning<int>();
+
+            
+            return 5;
+        });
+    } 
+    public ReturningList<int> TryGetReturningList()
+    {
+        return ReturningList<int>.Try(()=>
+        {
+            if (DateTime.Now.Day == 1) return Returning.Error("asd");
+
+            var res = GetReturning();
+
+            if (!res.Ok) return res;
+
+            var str1 = GetReturningInt();
+
+            if (!str1.Ok) return str1;
+
+            var strList1 = GetReturningLISTInt();
+
+            if (!strList1.Ok) return strList1;
+
+            var str = GetReturningString();
+
+            if (!str.Ok) return str.ToReturning<int>();
+
+            var strList = GetReturningLISTString();
+
+            if (!strList.Ok) return strList.ToReturning<int>();
+
+            return new List<int>();
+        });
+    } 
+    
+     public Task<Returning> TaskTryGetReturningOnly()
+    {
+        return Returning.TryTask(()=>
+        {
+            if (DateTime.Now.Day == 1) return Returning.Error("asd");
+
+            var res = GetReturning();
+
+            if (!res.Ok) return res;
+
+            var str1 = GetReturningInt();
+
+            if (!str1.Ok) return str1;
+
+            var strList1 = GetReturningLISTInt();
+
+            if (!strList1.Ok) return strList1;
+
+            var str = GetReturningString();
+
+            if (!str.Ok) return str.ToReturning<int>();
+
+            var strList = GetReturningLISTString();
+
+            if (!strList.Ok) return strList.ToReturning<int>();
+
+            return Returning.Success();
+        });
+    } 
+    public Task<Returning<int>> TaskTryGetReturningGeneric()
+    {
+        return Returning<int>.TryTask(()=>
+        {
+            if (DateTime.Now.Day == 1) return Returning.Error("asd");
+            if (DateTime.Now.Day == 2) return Returning.Success(2);
+
+            var res = GetReturning();
+
+            if (!res.Ok) return res;
+
+            var str1 = GetReturningInt();
+
+            if (!str1.Ok) return str1;
+
+            var strList1 = GetReturningLISTInt();
+
+            if (!strList1.Ok) return strList1;
+
+            var str = GetReturningString();
+
+            if (!str.Ok) return str.ToReturning<int>();
+
+            var strList = GetReturningLISTString();
+
+            if (!strList.Ok) return strList.ToReturning<int>();
+
+            
+            return 5;
+        });
+    } 
+    public Task<ReturningList<int>> TaskTryGetReturningList()
+    {
+        return ReturningList<int>.TryTask(()=>
+        {
+            if (DateTime.Now.Day == 1) return Returning.Error("asd");
+
+            var res = GetReturning();
+
+            if (!res.Ok) return res;
+
+            var str1 = GetReturningInt();
+
+            if (!str1.Ok) return str1;
+
+            var strList1 = GetReturningLISTInt();
+
+            if (!strList1.Ok) return strList1;
+
+            var str = GetReturningString();
+
+            if (!str.Ok) return str.ToReturning<int>();
+
+            var strList = GetReturningLISTString();
+
+            if (!strList.Ok) return strList.ToReturning<int>();
+
+            return new List<int>();
+        });
+    } 
+    
+    public Returning GetReturningOnly()
+    {
+        if (DateTime.Now.Day == 1) return Returning.Error("asd");
+    
+        var res = GetReturning();
+        if (!res.Ok) return res;
+
+        var str1 = GetReturningInt();
+        if (!str1.Ok) return str1;
+        
+        var strList1 = GetReturningLISTInt();
+        if (!strList1.Ok) return strList1;
+        
+        var str = GetReturningString();
+        if (!str.Ok) return str.ToReturning<int>();
+        
+        var strList = GetReturningLISTString();
+        if (!strList.Ok) return strList.ToReturning<int>();
+        
+        return Returning.Success();
+    } 
+    public Returning<int> GetReturningGeneric()
+    {
+        if (DateTime.Now.Day == 1) return Returning.Error("asd");
+    
+        var res = GetReturning();
+        if (!res.Ok) return res;
+
+        var str1 = GetReturningInt();
+        if (!str1.Ok) return str1;
+        
+        var strList1 = GetReturningLISTInt();
+        if (!strList1.Ok) return strList1;
+        
+        var str = GetReturningString();
+        if (!str.Ok) return str.ToReturning<int>();
+        
+        var strList = GetReturningLISTString();
+        if (!strList.Ok) return strList.ToReturning<int>();
+        
+        return 5;
+    } 
+    public ReturningList<int> GetReturningList()
+    {
+        if (DateTime.Now.Day == 1) return Returning.Error("asd");
+    
+        var res = GetReturning();
+        if (!res.Ok) return res;
+
+        var str1 = GetReturningInt();
+        if (!str1.Ok) return str1;
+        
+        var strList1 = GetReturningLISTInt();
+        if (!strList1.Ok) return strList1;
+        
+        var str = GetReturningString();
+        if (!str.Ok) return str.ToReturning<int>();
+        
+        var strList = GetReturningLISTString();
+        if (!strList.Ok) return strList.ToReturning<int>();
+        
+        return new List<int>();
+    } 
+    public Returning GetReturning()
+    {
+        
+        return Returning.Success();
+        
+    }
+
+    public Returning<string> GetReturningString()
+    {
+        
+        return Returning.Success("asd");
+        
+    }
+    
+    public ReturningList<string> GetReturningLISTString()
+    {
+        
+        return Returning.Success(new List<string>());
+        
+    }
+    
+    
+    public Returning<int> GetReturningInt()
+    {
+        
+        return Returning.Success(1);
+        
+    }
+    
+    public ReturningList<int> GetReturningLISTInt()
+    {
+        
+        return Returning.Success(new List<int>());
+        
+    }
 
     
     

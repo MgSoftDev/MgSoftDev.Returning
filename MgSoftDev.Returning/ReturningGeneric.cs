@@ -9,7 +9,7 @@ using MgSoftDev.ReturningCore.Helper;
 namespace MgSoftDev.ReturningCore;
 
 
-public class Returning< T > : Returning
+public class Returning< T > : ReturningBase
 {
     
     
@@ -42,28 +42,28 @@ public class Returning< T > : Returning
     /// <param name="filePath"></param>
     /// <param name="lineNumber"></param>
     /// <returns></returns>
-    public static Returning<T> Try(Func<T> methodFunc, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, [ CallerMemberName ] string memberName = null,
-                                        [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        try
-        {
-            var val = methodFunc.Invoke();
-
-            return val;
-        }
-        catch ( ReturningUnfinishedException e )
-        {
-            return e.Result.ToReturning<T>();
-        }
-        catch ( ReturningErrorException e )
-        {
-            return  e.Result.ToReturning<T>();
-        }
-        catch ( Exception e )
-        {
-            return new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-        }
-    }
+    // public static Returning<T> Try(Func<T> methodFunc, string errorName = "Unhandled error", string errorCode = ErrorInfo.UnhandledError, [ CallerMemberName ] string memberName = null,
+    //                                     [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    // {
+    //     try
+    //     {
+    //         var val = methodFunc.Invoke();
+    //
+    //         return val;
+    //     }
+    //     catch ( ReturningUnfinishedException e )
+    //     {
+    //         return e.Result.ToReturning<T>();
+    //     }
+    //     catch ( ReturningErrorException e )
+    //     {
+    //         return  e.Result.ToReturning<T>();
+    //     }
+    //     catch ( Exception e )
+    //     {
+    //         return new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
+    //     }
+    // }
 
     /// <summary>
     /// Execute a function[Task[T]] and catch the exceptions, returning an Returning[T]
@@ -89,7 +89,7 @@ public class Returning< T > : Returning
                 try
                 {
                     var invoke = await methodFunc.Invoke();
-                    return Success(invoke);
+                    return Returning.Success(invoke);
                 }
                 catch ( Exception e )
                 {
@@ -136,7 +136,7 @@ public class Returning< T > : Returning
             {
                 var val = methodFunc.Invoke();
 
-                return Success(val);
+                return Returning.Success(val);
             }
             catch ( ReturningUnfinishedException e )
             {
@@ -312,7 +312,28 @@ public class Returning< T > : Returning
             UnfinishedInfo = value
         };
 
+    public static implicit operator Returning<T>(Returning value)=>
+        new()
+        {
+            UnfinishedInfo = value.UnfinishedInfo,
+            ErrorInfo      = value.ErrorInfo,
+        };
+    
+    public static implicit operator Returning<T>(ReturningList<T> value)=>
+        new()
+        {
+            UnfinishedInfo = value.UnfinishedInfo,
+            ErrorInfo      = value.ErrorInfo,
+        };
+    
+   
 
+    public static implicit operator Returning(Returning<T> value)=>
+        new ()
+        {
+            UnfinishedInfo = value.UnfinishedInfo,
+            ErrorInfo      = value.ErrorInfo,
+        };
     #endregion
 
 

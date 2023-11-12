@@ -9,26 +9,9 @@ using MgSoftDev.ReturningCore.Helper;
 
 namespace MgSoftDev.ReturningCore;
 
-public partial class Returning 
+public partial class Returning : ReturningBase
 {
-    public enum TypeResult
-    {
-        Success,
-        Error,
-        Unfinished
-    }
-    #region Property
-
-    public UnfinishedInfo        UnfinishedInfo { get;  set; }
-    public ErrorInfo             ErrorInfo      { get;  set; }
-    public bool                  IsLogStored    { get;  set; }
-    public ErrorInfoException             LogException   { get;  set; }
-    public bool                  Ok             =>ErrorInfo == null && UnfinishedInfo == null;
-    public TypeResult ResultType     =>Ok ? TypeResult.Success : ( ErrorInfo != null ? TypeResult.Error : TypeResult.Unfinished );
-
-    #endregion
-
-    #region Methods
+     #region Methods
 
     /// <exception cref="ReturningErrorException">Condition.</exception>
     public Returning Throw()
@@ -107,7 +90,6 @@ public partial class Returning
         {
             UnfinishedInfo = value
         };
-
     public static implicit operator Returning(ReturningErrorException      value)=>value.Result;
     public static implicit operator Returning(ReturningUnfinishedException value)=>value.Result;
 
@@ -122,16 +104,6 @@ public partial class Returning
 
     #endregion
 
-    #region IDisposable
-
-    public void Dispose()
-    {
-        ErrorInfo      = null;
-        UnfinishedInfo = null;
-        LogException   = null;
-    }
-
-    #endregion
 }
 
 public partial class Returning 
@@ -390,3 +362,39 @@ public partial class Returning
     
     
 }
+
+
+public partial class ReturningBase 
+{
+    public enum TypeResult
+    {
+        Success,
+        Error,
+        Unfinished,
+        ErrorAndUnfinished
+    }
+    #region Property
+
+    public UnfinishedInfo        UnfinishedInfo { get;  set; }
+    public ErrorInfo             ErrorInfo      { get;  set; }
+    public bool                  IsLogStored    { get;  set; }
+    public ErrorInfoException             LogException   { get;  set; }
+    public bool                  Ok             =>ErrorInfo == null && UnfinishedInfo == null;
+    public TypeResult ResultType     =>Ok ? TypeResult.Success : ErrorInfo != null && UnfinishedInfo != null ? TypeResult.ErrorAndUnfinished : ErrorInfo != null ? TypeResult.Error : TypeResult.Unfinished;
+
+    #endregion
+
+   
+    #region IDisposable
+
+    public void Dispose()
+    {
+        ErrorInfo      = null;
+        UnfinishedInfo = null;
+        LogException   = null;
+    }
+
+    #endregion
+}
+
+
