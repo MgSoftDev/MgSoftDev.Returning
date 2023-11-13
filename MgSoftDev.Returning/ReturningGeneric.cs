@@ -299,7 +299,12 @@ public class Returning< T > : ReturningBase
         {
             Value = value
         };
-
+    public static implicit operator Returning<T>(ReturningError value)=>
+        new()
+        {
+            ErrorInfo = value.Error,
+            UnfinishedInfo = value.Unfinished
+        };
     public static implicit operator Returning<T>(ErrorInfo value)=>
         new()
         {

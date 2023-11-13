@@ -86,6 +86,24 @@ namespace MgSoftDev.ReturningCore.Helper
         }
         
         
+        public static ReturningError SaveLog(this ReturningError error, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
+        {
+            if (error?.Error == null || ReturningLogger.LoggerService == null) return error;
+
+            error.Error.SaveLog(logLevel, eventSource, logName);
+
+            return error;
+        }
+        public static async Task<ReturningError> SaveLogAsync(this ReturningError error, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
+        {
+            if (error == null || ReturningLogger.LoggerService == null) return error;
+
+            await error.Error.SaveLogAsync(logLevel, eventSource, logName);
+
+            return error;
+        }
+
+        
         public static ErrorInfo SaveLog(this ErrorInfo error, ReturningEnums.LogLevel logLevel = ReturningEnums.LogLevel.Error, object eventSource = null, string logName = null)
         {
             if (error == null || ReturningLogger.LoggerService == null) return error;

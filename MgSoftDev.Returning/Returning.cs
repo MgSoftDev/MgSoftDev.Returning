@@ -42,43 +42,54 @@ public partial class Returning : ReturningBase
             Value = value
         };
 
+    #region ReturningError
+
+    public static ReturningError Error()=>new();
+
+    #endregion
     
     #region Error
 
 
-    public static ErrorInfo Error(string errorMessage, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
-                                  [ CallerLineNumber ] int lineNumber = 0)=>
-        new(errorMessage, tryException, errorCode, memberName, filePath, lineNumber);
+    public static ReturningError Error(string errorMessage, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
+                                       [ CallerLineNumber ] int lineNumber = 0)=>
+        new ReturningError().SetError(errorMessage, tryException, errorCode, memberName, filePath, lineNumber);
 
 
-    public static ErrorInfo Error(string                    errorMessage,    object parameters, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null,
-                                  [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)=>
-        new(errorMessage, parameters, tryException, errorCode, memberName, filePath, lineNumber);
+    public static ReturningError Error(string                    errorMessage,    object parameters, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null,
+                                       [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)=>
+        new ReturningError().SetError(errorMessage, parameters, tryException, errorCode, memberName, filePath, lineNumber);
 
     #endregion
 
     #region Unfinished
 
-    public static UnfinishedInfo Unfinished(string title, string mensaje, UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information, string errorCode = null)=>
-        new(title, mensaje, notifyType, errorCode);
+    public static ReturningError Unfinished(string title, string mensaje, UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information, string errorCode = null)=>
+        new ReturningError().SetUnfinished(title, mensaje, notifyType, errorCode);
 
 
-    public static UnfinishedInfo Unfinished(string title, UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information, string errorCode = null)=>new(title, notifyType, errorCode);
+    public static ReturningError Unfinished(string title, UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information, string errorCode = null)=>
+        new ReturningError().SetUnfinished(title, notifyType, errorCode);
 
-    public static UnfinishedInfo UnfinishedLocalization(string                    titleKey, string mensajeKey, object[] titleFormatArgs = null, object[] mensajeFormatArgs = null,
+    public static ReturningError UnfinishedLocalization(string                    titleKey, string mensajeKey, object[] titleFormatArgs = null, object[] mensajeFormatArgs = null,
                                                         UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information, string errorCode = null)=>
-        UnfinishedInfo.FromLocalization(titleKey, mensajeKey, titleFormatArgs, mensajeFormatArgs, notifyType, errorCode);
+       new ReturningError().SetLocalization(titleKey, mensajeKey, titleFormatArgs, mensajeFormatArgs, notifyType, errorCode);
 
-    public static UnfinishedInfo UnfinishedLocalization(string titleKey, object[] titleFormatArgs = null, UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information,
+    public static ReturningError UnfinishedLocalization(string titleKey, object[] titleFormatArgs = null, UnfinishedInfo.NotifyType notifyType = UnfinishedInfo.NotifyType.Information,
                                                         string errorCode = null)=>
-        UnfinishedInfo.FromLocalization(titleKey, titleFormatArgs, notifyType, errorCode);
+        new ReturningError().SetLocalization(titleKey, titleFormatArgs, notifyType, errorCode);
 
     #endregion
 
     #endregion
 
     #region Operators Overloading
-
+    public static implicit operator Returning(ReturningError value)=>
+        new()
+        {
+            ErrorInfo = value.Error,
+            UnfinishedInfo = value.Unfinished
+        };
     public static implicit operator Returning(ErrorInfo value)=>
         new()
         {
@@ -140,7 +151,7 @@ public partial class Returning
         }
         catch ( Exception e )
         {
-            return Error(errorName, e, errorCode, memberName, filePath, lineNumber);
+            return Error(errorName, e, errorCode, memberName, filePath, lineNumber).SetUnfinished();
         }
     }
 
@@ -185,7 +196,7 @@ public partial class Returning
             {
                 // throw e.InnerException;
                 var error = Error(errorName, e, errorCode, memberName, filePath, lineNumber);
-                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
+                if (saveLog) error.Error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
 
                 return error;
             }

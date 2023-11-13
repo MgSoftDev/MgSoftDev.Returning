@@ -320,7 +320,12 @@ public class ReturningList< T > : ReturningBase
         {
             Value = value
         };
-
+    public static implicit operator ReturningList<T>(ReturningError value)=>
+        new()
+        {
+            ErrorInfo = value.Error,
+            UnfinishedInfo = value.Unfinished
+        };
     public static implicit operator ReturningList<T>(ErrorInfo value)=>
         new()
         {

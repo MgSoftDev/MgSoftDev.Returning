@@ -1,97 +1,88 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using MgSoftDev.ReturningCore.Exceptions;
 
 namespace MgSoftDev.ReturningCore;
 
-internal class ReturningError
+public class ReturningError
 {
-    #region Ctor
+    public ReturningError() { }
+
+    internal ErrorInfo      Error      { get; set; }
+    internal UnfinishedInfo Unfinished { get; set; }
     
-    public ReturningError(ErrorInfo error)
+    #region Fluent Api
+
+    public ReturningError SetUnfinished(string title, string mensaje, UnfinishedInfo.NotifyType notifyType = ReturningCore.UnfinishedInfo.NotifyType.Information, string errorCode = null)
     {
-        Error = error;
+        Unfinished = new UnfinishedInfo(title, mensaje, notifyType, errorCode);
+
+        return this;
     }
-    public ReturningError(UnfinishedInfo unfinished)
+
+    public ReturningError SetUnfinished(string title, UnfinishedInfo.NotifyType notifyType = ReturningCore.UnfinishedInfo.NotifyType.Information, string errorCode = null)
     {
-        Unfinished = unfinished;
+        Unfinished = new UnfinishedInfo(title, notifyType, errorCode);
+
+        return this;
     }
-    public ReturningError(ErrorInfo error, UnfinishedInfo unfinished)
+
+
+    public ReturningError SetLocalization(string                    titleKey, string mensajeKey, object[] titleFormatArgs = null, object[] mensajeFormatArgs = null,
+                                          UnfinishedInfo.NotifyType notifyType = ReturningCore.UnfinishedInfo.NotifyType.Information, string errorCode = null)
     {
-        Error      = error;
-        Unfinished = unfinished;
+        Unfinished = ReturningCore.UnfinishedInfo.FromLocalization(titleKey, mensajeKey, titleFormatArgs, mensajeFormatArgs, notifyType, errorCode);
+
+        return this;
     }
-    
+
+    public ReturningError SetLocalization(string titleKey, object[] titleFormatArgs = null, UnfinishedInfo.NotifyType notifyType = ReturningCore.UnfinishedInfo.NotifyType.Information,
+                                          string errorCode = null)
+    {
+        Unfinished = ReturningCore.UnfinishedInfo.FromLocalization(titleKey, titleFormatArgs, notifyType, errorCode);
+
+        return this;
+    }
+
+
+    public ReturningError SetUnfinished()
+    {
+        Unfinished = new UnfinishedInfo(Error?.ErrorMessage, null, ReturningCore.UnfinishedInfo.NotifyType.Error, Error?.ErrorCode);
+
+        return this;
+    }
+
+    public ReturningError SetError([ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    {
+        Error = new ErrorInfo(Unfinished?.Title + "\t" + Unfinished?.Mensaje, null, Unfinished?.ErrorCode, memberName, filePath, lineNumber);
+
+        return this;
+    }
+
+    public ReturningError SetError(string errorMessage, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
+                                   [ CallerLineNumber ] int lineNumber = 0)
+    {
+        Error = new ErrorInfo(errorMessage, tryException, errorCode, memberName, filePath, lineNumber);
+
+        return this;
+    }
+
+    public ReturningError SetError(string                    errorMessage,    object parameters, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null,
+                                   [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    {
+        Error = new ErrorInfo(errorMessage, parameters, tryException, errorCode, memberName, filePath, lineNumber);
+
+        return this;
+    }
 
     #endregion
 
-    #region Statics
-
-    #region ErrorInfo
-
-    public static ReturningError ErrorInfo(string errorMessage, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
-                                           [ CallerLineNumber ] int lineNumber = 0)
-    {
-        return new ReturningError(new ErrorInfo(errorMessage, tryException, errorCode, memberName, filePath, lineNumber));
-    }
-
-    public static ReturningError ErrorInfo(string                    errorMessage,    object parameters, Exception tryException = null, string errorCode = "", [ CallerMemberName ] string memberName = null,
-                                           [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        return new ReturningError(new ErrorInfo(errorMessage, parameters, tryException, errorCode, memberName, filePath, lineNumber));
-    }
-
-    #endregion
-
-    #region UnfinishedInfo
-
-    public static ReturningError UnfinishedInfo(string title, string mensaje, UnfinishedInfo.NotifyType notifyType = ReturningCore.UnfinishedInfo.NotifyType.Information, string errorCode = null)
-    {
-        return new ReturningError(new UnfinishedInfo(title, mensaje, notifyType, errorCode));
-    }
-    public static ReturningError UnfinishedInfo(string title, UnfinishedInfo.NotifyType notifyType = ReturningCore.UnfinishedInfo.NotifyType.Information, string errorCode = null)
-    {
-        return new ReturningError(new UnfinishedInfo(title, notifyType, errorCode));
-    }
-
-    public static ReturningError FromLocalization(string titleKey, string mensajeKey, object[] titleFormatArgs = null,object[] mensajeFormatArgs = null, UnfinishedInfo.NotifyType notifyType = ReturningCore.UnfinishedInfo.NotifyType.Information, string errorCode = null)
-    {
-        return new ReturningError(ReturningCore.UnfinishedInfo.FromLocalization(titleKey, mensajeKey, titleFormatArgs, mensajeFormatArgs, notifyType, errorCode));
-    }
-    public static ReturningError FromLocalization(string titleKey, object[] titleFormatArgs = null, UnfinishedInfo.NotifyType notifyType = ReturningCore.UnfinishedInfo.NotifyType.Information, string errorCode = null)
-    {
-        return new ReturningError(ReturningCore.UnfinishedInfo.FromLocalization(titleKey, titleFormatArgs, notifyType, errorCode));
-    }
-
-    #endregion
-
     
-    #region ErrorAndUnfinishedInfo
-
-    public static ReturningError ErrorAndUnfinishedInfo(string title, string mensaje, Exception tryException = null,object parameters=null, UnfinishedInfo.NotifyType notifyType = ReturningCore.UnfinishedInfo.NotifyType.Information, string errorCode = null, [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
-                                                        [ CallerLineNumber ] int lineNumber = 0)
+    public Returning Throw()
     {
-        return new ReturningError(new ErrorInfo(title+" \t " + mensaje,parameters, tryException, errorCode, memberName, filePath, lineNumber),  new UnfinishedInfo(title, mensaje, notifyType, errorCode));
-    }
-    public static ReturningError ErrorAndUnfinishedInfo(string title, Exception tryException = null,object parameters=null, UnfinishedInfo.NotifyType notifyType = ReturningCore.UnfinishedInfo.NotifyType.Information, string errorCode = null, [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null,
-                                                        [ CallerLineNumber ] int lineNumber = 0)
-    {
-        return new ReturningError(new ErrorInfo(title , tryException, errorCode, memberName, filePath, lineNumber),new UnfinishedInfo(title, notifyType, errorCode));
-    }
+        if (Error!= null) throw new ReturningErrorException(this);
+        if (Unfinished != null) throw new ReturningUnfinishedException(this);
 
- 
-    #endregion
-    #endregion
-    
-    public enum ErrorTypes
-    {
-        Error,
-        Unfinished,
-        ErrorAndUnfinished
+        return this;
     }
-    
-    public ErrorInfo      Error      { get; set; }
-    public UnfinishedInfo Unfinished { get; set; }
-    public ErrorTypes     ErrorType       => Error != null && Unfinished != null ? ErrorTypes.ErrorAndUnfinished : Error != null ? ErrorTypes.Error : ErrorTypes.Unfinished;
-    
-
 }
