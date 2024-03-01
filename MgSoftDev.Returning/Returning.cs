@@ -156,6 +156,37 @@ public partial class Returning
     }
 
     /// <summary>
+    /// Execute a Function that return Returning    and catch the exceptions, returning an Returning
+    /// </summary>
+    /// <param name="methodAction"></param>
+    /// <param name="errorName"></param>
+    /// <param name="errorCode"></param>
+    /// <param name="memberName"></param>
+    /// <param name="filePath"></param>
+    /// <param name="lineNumber"></param>
+    /// <returns></returns>
+    public static Returning Try(Func<Returning> methodAction, string errorName = "Unhandled error", string errorCode = "ErrorInfo.UnhandledError", [ CallerMemberName ] string memberName = null,
+                                [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    {
+        try
+        {
+            return methodAction.Invoke();
+        }
+        catch ( ReturningUnfinishedException e )
+        {
+            return e.Result;
+        }
+        catch ( ReturningErrorException e )
+        {
+            return e.Result;
+        }
+        catch ( Exception e )
+        {
+            return new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
+        }
+    }
+
+    /// <summary>
     /// Execute a Task method and catch the exceptions, returning an Returning
     /// </summary>
     /// <param name="methodAction"></param>
@@ -246,34 +277,45 @@ public partial class Returning
 
 
     /// <summary>
-    /// Execute a Function that return Returning    and catch the exceptions, returning an Returning
+    ///  Execute in new Thread a Function that return Returning    and catch the exceptions, returning an Returning
     /// </summary>
     /// <param name="methodAction"></param>
+    /// <param name="saveLog"></param>
     /// <param name="errorName"></param>
     /// <param name="errorCode"></param>
+    /// <param name="logName"></param>
     /// <param name="memberName"></param>
     /// <param name="filePath"></param>
     /// <param name="lineNumber"></param>
     /// <returns></returns>
-    public static Returning Try(Func<Returning> methodAction, string errorName = "Unhandled error", string errorCode = "ErrorInfo.UnhandledError", [ CallerMemberName ] string memberName = null,
-                                [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
+    public static Task<Returning> TryTask(Func<Returning> methodAction, bool saveLog = false, string errorName = "Unhandled error", string errorCode = "ErrorInfo.UnhandledError", string logName = "",
+                                          [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
     {
-        try
+        return Task.Run<Returning>(()=>
         {
-            return methodAction.Invoke();
-        }
-        catch ( ReturningUnfinishedException e )
-        {
-            return e.Result;
-        }
-        catch ( ReturningErrorException e )
-        {
-            return e.Result;
-        }
-        catch ( Exception e )
-        {
-            return new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-        }
+            try
+            {
+                var res = methodAction.Invoke();
+                if (saveLog) res.SaveLog();
+
+                return res;
+            }
+            catch ( ReturningUnfinishedException e )
+            {
+                return e.Result;
+            }
+            catch ( ReturningErrorException e )
+            {
+                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : e.Result;
+            }
+            catch ( Exception e )
+            {
+                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
+                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
+
+                return error;
+            }
+        });
     }
 
     /// <summary>
@@ -306,48 +348,6 @@ public partial class Returning
                 {
                     throw e.InnerException??e;
                 }
-            }
-            catch ( ReturningUnfinishedException e )
-            {
-                return e.Result;
-            }
-            catch ( ReturningErrorException e )
-            {
-                return saveLog ? e.Result.SaveLog(ReturningEnums.LogLevel.Error, null, logName) : e.Result;
-            }
-            catch ( Exception e )
-            {
-                var error = new ErrorInfo(errorName, e, errorCode, memberName, filePath, lineNumber);
-                if (saveLog) error.SaveLog(ReturningEnums.LogLevel.Error, null, logName);
-
-                return error;
-            }
-        });
-    }
-
-    /// <summary>
-    ///  Execute in new Thread a Function that return Returning    and catch the exceptions, returning an Returning
-    /// </summary>
-    /// <param name="methodAction"></param>
-    /// <param name="saveLog"></param>
-    /// <param name="errorName"></param>
-    /// <param name="errorCode"></param>
-    /// <param name="logName"></param>
-    /// <param name="memberName"></param>
-    /// <param name="filePath"></param>
-    /// <param name="lineNumber"></param>
-    /// <returns></returns>
-    public static Task<Returning> TryTask(Func<Returning> methodAction, bool saveLog = false, string errorName = "Unhandled error", string errorCode = "ErrorInfo.UnhandledError", string logName = "",
-                                          [ CallerMemberName ] string memberName = null, [ CallerFilePath ] string filePath = null, [ CallerLineNumber ] int lineNumber = 0)
-    {
-        return Task.Run<Returning>(()=>
-        {
-            try
-            {
-                var res = methodAction.Invoke();
-                if (saveLog) res.SaveLog();
-
-                return res;
             }
             catch ( ReturningUnfinishedException e )
             {

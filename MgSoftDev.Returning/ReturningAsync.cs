@@ -8,6 +8,7 @@ public class ReturningAsync : Task<Returning>
 {
     public ReturningAsync(Func<Returning> function): base(function)
     {
+        
         Start();
     }
     public ReturningAsync(Func<Returning> function, CancellationToken cancellationToken) : base(function, cancellationToken)

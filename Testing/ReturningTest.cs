@@ -45,7 +45,6 @@ public class ReturningTest
                                                                  .Throw(), "ReturningUnfinishedException");
         Assert.Pass();
     }
-
     [ Test ]
     public void Try1()
     {
