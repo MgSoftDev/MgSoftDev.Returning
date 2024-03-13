@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
+        <Description>Library to generate notifications using the MgSoftDev.Controls.WPF library.</Description>
+        <Authors>Miguel Fernando Garcias Salazar</Authors>
+        <Copyright>MgSoftDev</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/MgSoftDev/MgSoftDev.Returning</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/MgSoftDev/MgSoftDev.Returning</RepositoryUrl>
+        <Company>MgSoftDev</Company>
+        <RootNamespace>MgSoftDev.ReturningCore.NotifyExtensions</RootNamespace>
+        <AssemblyName>MgSoftDev.Returning.NotifyExtensions</AssemblyName>
+
+        <PackageTags>Returning,NotifyExtensions</PackageTags>
+        <Version>1.1.0</Version>
+        <LangVersion>10</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <AssemblyVersion>1.1.0</AssemblyVersion>
+        <FileVersion>1.1.0</FileVersion>
+        <PackageId>MgSoftDev.Returning.NotifyExtensions</PackageId>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MgSoftDev.Controls.WPF" Version="1.7.0" />
+      <PackageReference Include="MgSoftDev.Returning" Version="1.1.0" />
+    </ItemGroup>
+
+</Project>

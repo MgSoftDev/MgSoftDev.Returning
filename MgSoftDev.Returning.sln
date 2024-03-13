@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MgSoftDev.Returning.Serilog
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{F9D77AF4-BFA4-4012-89B4-279C1C25096A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MgSoftDev.Returning.NotifyExtensions", "MgSoftDev.Returning.NotifyExtensions\MgSoftDev.Returning.NotifyExtensions.csproj", "{28AB9D06-077A-4A1D-9001-469460D977BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{F9D77AF4-BFA4-4012-89B4-279C1C25096A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9D77AF4-BFA4-4012-89B4-279C1C25096A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9D77AF4-BFA4-4012-89B4-279C1C25096A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28AB9D06-077A-4A1D-9001-469460D977BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28AB9D06-077A-4A1D-9001-469460D977BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28AB9D06-077A-4A1D-9001-469460D977BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28AB9D06-077A-4A1D-9001-469460D977BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
