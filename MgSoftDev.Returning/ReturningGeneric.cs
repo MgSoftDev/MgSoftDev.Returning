@@ -24,6 +24,7 @@ public class Returning< T > : ReturningBase
     public new Returning<T> Throw()
     {
         if (ResultType == TypeResult.Error) throw new ReturningErrorException(this);
+        if (ResultType == TypeResult.ErrorAndUnfinished) throw new ReturningUnfinishedException(this);
         if (ResultType == TypeResult.Unfinished) throw new ReturningUnfinishedException(this);
 
         return this;
