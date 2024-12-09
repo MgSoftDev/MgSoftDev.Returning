@@ -13,16 +13,16 @@
         <AssemblyName>MgSoftDev.Returning.NotifyExtensions</AssemblyName>
 
         <PackageTags>Returning,NotifyExtensions</PackageTags>
-        <Version>1.2.0</Version>
+        <Version>1.2.1</Version>
         <LangVersion>10</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <AssemblyVersion>1.2.0</AssemblyVersion>
-        <FileVersion>1.2.0</FileVersion>
+        <AssemblyVersion>1.2.1</AssemblyVersion>
+        <FileVersion>1.2.1</FileVersion>
         <PackageId>MgSoftDev.Returning.NotifyExtensions</PackageId>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MgSoftDev.Controls.WPF" Version="1.7.0" />
+      <PackageReference Include="MgSoftDev.Controls.WPF" Version="1.7.1" />
       <PackageReference Include="MgSoftDev.Returning" Version="1.2.0" />
     </ItemGroup>
 
