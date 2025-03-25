@@ -12,7 +12,7 @@
         <PackageProjectUrl>https://github.com/MgSoftDev/MgSoftDev.Returning</PackageProjectUrl>
         <RepositoryUrl>https://github.com/MgSoftDev/MgSoftDev.Returning</RepositoryUrl>
         <PackageTags>Returning, Serilog</PackageTags>
-        <Version>1.1.4</Version>
+        <Version>1.1.5</Version>
         <LangVersion>10</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <AssemblyVersion>1.1.5</AssemblyVersion>
